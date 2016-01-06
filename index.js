@@ -9,6 +9,7 @@ app.set('views', __dirname + '\\views'); //setting the directory in which the ja
 app.set('view engine', 'jade');
 
 app.get('/', routes.index);
+app.get('/register', routes.userRegister);
 
 console.log('Meow');
 app.listen(3000);
