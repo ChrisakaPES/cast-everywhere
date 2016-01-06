@@ -1,0 +1,71 @@
+@font-face{
+    font-family: "Titillium";
+    src: url("Titillium/Titillium-Regular.otf");
+    font-weight:normal;
+    font-style:normal;
+}
+@font-face {
+    font-family: "Titillium";
+    src: url("Titillium/Titillium-bold.otf");
+    font-weight: bold;
+    font-style: normal:
+}
+* {
+    box-sizing: border-box;   
+}
+body {
+    background-color: #F5FFE1;
+    font-family: "Titillium";
+}
+.condensed-workout {
+    background-color: #445745;
+    color: floralwhite;
+}
+.dark-green-box {
+    background-color: #677F47;
+    height: 3em;
+}
+.pure-g [class*="pure-u"] {
+    font-family: "Titillium";   
+}
+.navbar {
+    color: #FFFFFF;
+    height:3em;
+    margin: 0 auto;
+    width: 80%;   
+}
+.navitem {
+    height: 3em;
+}
+
+.navitem > a {
+    align-items: center;
+    color:#FFFFFF;
+    display:inline-flex;
+    font-size:1.5em;
+    height:100%;
+    text-decoration: none;
+    
+}
+.siteid {
+    font-weight: bold;
+    font-size: 3em;
+    margin: 0 auto;
+    width: 80%;  
+}
+.siteidtext {
+    padding: 0 1em;
+}
+.siteidtext > a {
+    color:#000000;
+    text-decoration: none;
+}
+
+#example {
+    margin: 0 auto;
+    width:80%;
+}
+#header-section {
+    position:relative;
+    width:100%;
+}
