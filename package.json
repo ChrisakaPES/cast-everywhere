@@ -1,0 +1,33 @@
+{
+  "name": "cast-everywhere",
+  "version": "1.0.0",
+  "description": "Web Based Podcast Manager",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.13.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-preset-react": "^6.3.13"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"build-react": "./node_modules/.bin/babel public/scripts --out-dir public/build/scripts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisakaPES/cast-everywhere.git"
+  },
+  "keywords": [
+    "Podcast",
+    "Manager",
+    "Web"
+  ],
+  "author": "Chris Quintanilla",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChrisakaPES/cast-everywhere/issues"
+  },
+  "homepage": "https://github.com/ChrisakaPES/cast-everywhere#readme"
+}

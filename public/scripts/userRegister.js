@@ -1,6 +1,7 @@
 var UserRegisterForm = React.createClass({
     render: function () {
-        return ( < div className = "test-background" >
+        return ( 
+            < div className = "test-background" >
             < h1 > Register < /h1> < form method = "post"
             action = "/register"
             className = "pure-form pure-form-aligned" >
@@ -25,6 +26,5 @@ var UserRegisterForm = React.createClass({
     }
 });
 ReactDOM.render( < UserRegisterForm / >,
-    document.getElementById('mainContent');
-
+    document.getElementById('main-content')
 );

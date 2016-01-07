@@ -1,0 +1,10 @@
+{
+  "presets": ["react"],
+  "plugins": [
+	"transform-react-jsx",
+	"transform-flow-strip-types",
+	"syntax-jsx",
+	"syntax-flow"
+  ],
+  "ignore": []
+}

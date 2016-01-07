@@ -1,5 +1,6 @@
 node index.js 
 	to run website
-babel public/scripts --watch --out-dir public/build/scripts
-	To convert the JSX in my developmentfiles to regular javascript for deployment 
+npm run build-react
+	To convert the JSX in my developmentfiles to regular javascript for deployment
+	The actual command is written in cast-everywhere's package.json that is way we call the command through npm 
 	(check that the files are actually being converted) 
