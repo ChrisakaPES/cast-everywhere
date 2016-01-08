@@ -24,6 +24,8 @@ var userSchema = mongoose.Schema({
     
 });
 
+var User = mongoose.model('User',userSchema);
+
 var view_directory = __dirname.replace('routes', 'views');
 
 
@@ -49,4 +51,19 @@ exports.userRegister = function (req,res) {
     }
     res.sendFile('/user-register.html', options);
 }
-exports.userRegisterPost
+exports.userRegisterPost = function (req,res) {
+    var userName = req.body.username,
+        userPassword = req.body.password,
+        userEmail = req.body.email;
+    var newUser = new User({
+        name: userName,
+        password: userPassword,
+        email: userEmail
+    }); 
+    newUser.save(function (err, newUser) {
+       if(err)return console.error(err);
+        console.log("New User added.");
+        console.log(newUser);
+        res.redirect(301, '/');
+    });
+}

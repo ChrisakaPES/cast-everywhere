@@ -1,4 +1,5 @@
-var express = require('express'),
+var bodyParser = require('body-parser'),
+    express = require('express'),
     path = require('path'),
     routes = require('./routes/routes.js');
 
@@ -8,8 +9,11 @@ app.use(express.static(path.join(__dirname + '/public')));//allow app to use sta
 app.set('views', __dirname + '\\views'); //setting the directory in which the jade files will be
 app.set('view engine', 'jade');
 
+var urlencodedParser = bodyParser.urlencoded({extended:false});
+
 app.get('/', routes.index);
 app.get('/register', routes.userRegister);
 
+app.post('/register', urlencodedParser, routes.userRegisterPost);
 console.log('Meow');
 app.listen(3000);
