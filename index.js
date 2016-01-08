@@ -13,6 +13,7 @@ var urlencodedParser = bodyParser.urlencoded({extended:false});
 
 app.get('/', routes.index);
 app.get('/register', routes.userRegister);
+app.get('/testaudioplayer', routes.testAudioPlayer);
 
 app.post('/register', urlencodedParser, routes.userRegisterPost);
 console.log('Meow');

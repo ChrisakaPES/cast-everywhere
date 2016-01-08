@@ -40,6 +40,18 @@ exports.index = function (req,res) {
     }
     res.sendFile('/index.html', options);   
 }
+exports.testAudioPlayer = function(req,res) {
+    var options = {
+        root: view_directory,
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent':true    
+        }
+    }
+    
+    res.sendFile('/test-audio-player', options);
+}
 exports.userRegister = function (req,res) {
     var options = {
         root: view_directory,
