@@ -5,6 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.13.3",
+    "mongodb-uri": "^0.9.7",
+    "mongoose": "^4.3.4",
     "path": "^0.12.7"
   },
   "devDependencies": {
@@ -13,7 +15,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"build-react": "./node_modules/.bin/babel public/scripts --out-dir public/build/scripts"
+    "build-react": "./node_modules/.bin/babel public/scripts --out-dir public/build/scripts"
   },
   "repository": {
     "type": "git",
