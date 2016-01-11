@@ -50,7 +50,7 @@ exports.testAudioPlayer = function(req,res) {
         }
     }
     
-    res.sendFile('/test-audio-player', options);
+    res.sendFile('/test-audio-player.html', options);
 }
 exports.userRegister = function (req,res) {
     var options = {
