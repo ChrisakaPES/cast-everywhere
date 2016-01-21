@@ -17,6 +17,22 @@ body {
     background-color: #F5FFE1;
     font-family: "Titillium";
 }
+.bookmark-button {
+    background-color: bisque; 
+    float:right;
+    height: 28px;
+    margin-right: 5%;
+    margin-top: 6px;
+    text-align: center;
+    text-indent: 0;
+    width: 28px;
+      
+}
+.bottom-of-page {
+    bottom:0;
+    position:absolute;
+    width: 100%;
+}
 .condensed-workout {
     background-color: #445745;
     color: floralwhite;

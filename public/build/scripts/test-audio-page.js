@@ -4,7 +4,7 @@ var TestAudioPlayer = React.createClass({
     render: function () {
         return React.createElement(
             "section",
-            null,
+            { className: "bottom-of-page" },
             React.createElement("div", { id: "jquery_jplayer_1", className: "jp-jplayer" }),
             React.createElement(
                 "div",
@@ -27,6 +27,11 @@ var TestAudioPlayer = React.createClass({
                                 "button",
                                 { className: "jp-stop", role: "button", tabindex: "0" },
                                 "stop"
+                            ),
+                            React.createElement(
+                                "button",
+                                { id: "bookmarkButton", className: "bookmark-button", role: "button" },
+                                "B"
                             )
                         ),
                         React.createElement(
@@ -36,6 +41,15 @@ var TestAudioPlayer = React.createClass({
                                 "div",
                                 { className: "jp-seek-bar" },
                                 React.createElement("div", { className: "jp-play-bar" })
+                            )
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "bookmarking section" },
+                            React.createElement(
+                                "button",
+                                { id: "oldbookmarkButton", className: "bookmark-button", role: "button" },
+                                "B"
                             )
                         ),
                         React.createElement(

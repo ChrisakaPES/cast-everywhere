@@ -1,7 +1,7 @@
 var TestAudioPlayer = React.createClass({
     render: function () {
         return (
-            <section>
+            <section className="bottom-of-page">
                 
                 <div id="jquery_jplayer_1" className="jp-jplayer"></div>
                 <div id="jp_container_1" className="jp-audio" role="application" aria-label="media player">
@@ -10,11 +10,15 @@ var TestAudioPlayer = React.createClass({
                             <div className="jp-controls">
                                 <button className="jp-play" role="button" tabindex="0">play</button>
                                 <button className="jp-stop" role="button" tabindex="0">stop</button>
+                                <button id="bookmarkButton" className="bookmark-button" role="button">B</button>
                             </div>
                             <div className="jp-progress">
                                 <div className="jp-seek-bar">
                                     <div className="jp-play-bar"></div>
                                 </div>
+                            </div>
+                            <div className="bookmarking section">
+                                <button id="oldbookmarkButton" className="bookmark-button" role="button">B</button>
                             </div>
                             <div className="jp-volume-controls">
                                 <button className="jp-mute" role="button" tabindex="0">mute</button>
