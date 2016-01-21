@@ -16,7 +16,11 @@ db.once('open', function (callback) {
 
 //Schemas
 var podcastSchema = mongoose.Schema({});
-var podcastSubscriptionScema = mongoose.Schema({});
+var podcastSubscriptionSchema = mongoose.Schema({});
+var podcastTimestampSchema = mongoose.Schema({
+    podcastName: String,
+    timeStampInSecs: Number
+});
 var userSchema = mongoose.Schema({
     name: String,
     email: String,
@@ -28,7 +32,9 @@ var User = mongoose.model('User',userSchema);
 
 var view_directory = __dirname.replace('routes', 'views');
 
-
+exports.ajaxAddBookmark = function (req, res) {
+         
+}
 exports.index = function (req,res) {
     var options = {
         root: view_directory,

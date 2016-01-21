@@ -20,11 +20,15 @@
 //});
 $(document).ready(function () {
     var jplayer = $("#jquery_jplayer_1").jPlayer({
-        ready: function () {
+        ready: function (event) {
             $(this).jPlayer("setMedia", {
                 title: "Giant Bombcast",
                 mp3: "http://www.giantbomb.com/podcasts/download/1473/Giant_Bombcast_01_12_2016-01-12-2016-0020062817.mp3"
             });
+            //            $("#bookmarkButton").click(function() {
+            //                console.log("Meow bookmarkButton Pressed");
+            //                console.log(event);
+            //            });
         },
         click: function (event) {
             console.log(event.jPlayer);
@@ -43,8 +47,9 @@ $(document).ready(function () {
             height: "0"
         }
     });
+    var jPlayerData = $("#jquery_jplayer_1").data('jPlayer');
     $("#bookmarkButton").click(function () {
         console.log("Meow bookmarkButton Pressed");
-        console.log($.jPlayer);
+        console.log(jPlayerData.status.currentTime);
     });
 });

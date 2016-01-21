@@ -16,5 +16,7 @@ app.get('/register', routes.userRegister);
 app.get('/testaudioplayer', routes.testAudioPlayer);
 
 app.post('/register', urlencodedParser, routes.userRegisterPost);
+
+app.post('/ajax/addbookmark', routes.ajaxAddBookmark);
 console.log('Meow');
 app.listen(3000);
