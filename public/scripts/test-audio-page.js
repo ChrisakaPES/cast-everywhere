@@ -7,6 +7,7 @@ var TestAudioPlayer = React.createClass({
                 <div id="jp_container_1" className="jp-audio" role="application" aria-label="media player">
                     <div className="jp-type-single">
                         <div className="jp-gui jp-interface">
+                            <canvas id="checkpointCanvas" className="checkpoint-canvas"></canvas>
                             <div className="jp-controls">
                                 <button className="jp-play" role="button" tabindex="0">play</button>
                                 <button className="jp-stop" role="button" tabindex="0">stop</button>

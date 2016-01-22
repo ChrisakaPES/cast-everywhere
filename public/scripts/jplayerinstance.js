@@ -48,6 +48,8 @@ $(document).ready(function() {
         }
     });
     var jPlayerData = $("#jquery_jplayer_1").data('jPlayer');
+    var checkpointCanvasContext = $('#checkpointCanvas')[0].getContext('2d');
+    
     $("#bookmarkButton").click(function(){
         console.log("Meow bookmarkButton Pressed");
         console.log(jPlayerData.status.currentTime);
@@ -56,6 +58,23 @@ $(document).ready(function() {
             currentTime: timestamp,
             podcast: 'Giantbomb Cast'
         });
+        
+        checkpointCanvasContext.moveTo(0,0);
+        checkpointCanvasContext.beginPath();
+        checkpointCanvasContext.lineTo(0,8);
+        checkpointCanvasContext.lineTo(8,8);
+        checkpointCanvasContext.lineTo(8,0);
+        checkpointCanvasContext.lineTo(0,0);
+        checkpointCanvasContext.stroke();
+        
+        checkpointCanvasContext.moveTo(20,1);
+        checkpointCanvasContext.beginPath();
+        checkpointCanvasContext.lineTo(20,9);
+        checkpointCanvasContext.lineTo(28,9);
+        checkpointCanvasContext.lineTo(28,1);
+        checkpointCanvasContext.lineTo(20,1);
+        checkpointCanvasContext.stroke();
+        
     });
 });
 

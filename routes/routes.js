@@ -29,11 +29,24 @@ var userSchema = mongoose.Schema({
 });
 
 var User = mongoose.model('User',userSchema);
+var PodcastTimestamp = mongoose.model('PodcastTimestamp', podcastTimestampSchema);
 
 var view_directory = __dirname.replace('routes', 'views');
 
 exports.ajaxAddBookmark = function (req, res) {
-         
+    console.log(req.body);
+    var checkpointInSec = req.body.currentTime;
+    var podcastName = req.body.podcast;
+    
+    var newPodcastTimeStamp = new PodcastTimestamp({
+        podcastName: podcastName,
+        timeStampInSecs: checkpointInSec
+    });
+    newPodcastTimeStamp.save(function (err, newPodcastCheckpoint) {
+        if(err)return console.error(err);
+        console.log("New Checkpoint added");
+        console.log(newPodcastCheckpoint);
+    });
 }
 exports.index = function (req,res) {
     var options = {
