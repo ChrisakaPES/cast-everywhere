@@ -35,11 +35,9 @@ body {
 }
 .checkpoint-canvas {
     background-color:aqua;
-    height:15px;
     left:15%;
     position: absolute;
     top: 15px;
-    width: 70%;
 }
 .condensed-workout {
     background-color: #445745;

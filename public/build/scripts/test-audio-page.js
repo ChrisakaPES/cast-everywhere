@@ -15,7 +15,7 @@ var TestAudioPlayer = React.createClass({
                     React.createElement(
                         "div",
                         { className: "jp-gui jp-interface" },
-                        React.createElement("canvas", { id: "checkpointCanvas", className: "checkpoint-canvas" }),
+                        React.createElement("canvas", { id: "checkpointCanvas", className: "checkpoint-canvas", height: "15", width: "1342" }),
                         React.createElement(
                             "div",
                             { className: "jp-controls" },

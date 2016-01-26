@@ -19,16 +19,15 @@
 //    });
 //});
 $(document).ready(function () {
+    var checkpointCanvas = $('#checkpointCanvas')[0];
+    var checkpointCanvasContext = checkpointCanvas.getContext('2d');
+
     var jplayer = $("#jquery_jplayer_1").jPlayer({
         ready: function (event) {
             $(this).jPlayer("setMedia", {
                 title: "Giant Bombcast",
                 mp3: "http://www.giantbomb.com/podcasts/download/1473/Giant_Bombcast_01_12_2016-01-12-2016-0020062817.mp3"
             });
-            //            $("#bookmarkButton").click(function() {
-            //                console.log("Meow bookmarkButton Pressed");
-            //                console.log(event);
-            //            });
         },
         click: function (event) {
             console.log(event.jPlayer);
@@ -48,7 +47,12 @@ $(document).ready(function () {
         }
     });
     var jPlayerData = $("#jquery_jplayer_1").data('jPlayer');
-    var checkpointCanvasContext = $('#checkpointCanvas')[0].getContext('2d');
+
+    function canvasMatchProgressBar() {
+        checkpointCanvas.setAttribute('height', $(".jp-progress").height());
+        checkpointCanvas.setAttribute('width', $(".jp-progress").width() + 3);
+    }
+    $(window).resize(canvasMatchProgressBar);
 
     $("#bookmarkButton").click(function () {
         console.log("Meow bookmarkButton Pressed");
@@ -59,20 +63,17 @@ $(document).ready(function () {
             podcast: 'Giantbomb Cast'
         });
 
+        checkpointCanvasContext.fillStyle = "#FF0000";
         checkpointCanvasContext.moveTo(0, 0);
         checkpointCanvasContext.beginPath();
-        checkpointCanvasContext.lineTo(0, 8);
-        checkpointCanvasContext.lineTo(8, 8);
-        checkpointCanvasContext.lineTo(8, 0);
+        checkpointCanvasContext.lineTo(7, 0);
+        checkpointCanvasContext.lineTo(7, 7);
+        checkpointCanvasContext.lineTo(4, 15);
+        checkpointCanvasContext.lineTo(0, 7);
         checkpointCanvasContext.lineTo(0, 0);
         checkpointCanvasContext.stroke();
-
-        checkpointCanvasContext.moveTo(20, 1);
-        checkpointCanvasContext.beginPath();
-        checkpointCanvasContext.lineTo(20, 9);
-        checkpointCanvasContext.lineTo(28, 9);
-        checkpointCanvasContext.lineTo(28, 1);
-        checkpointCanvasContext.lineTo(20, 1);
-        checkpointCanvasContext.stroke();
+        checkpointCanvasContext.closePath();
+        checkpointCanvasContext.fill();
     });
+    canvasMatchProgressBar();
 });
