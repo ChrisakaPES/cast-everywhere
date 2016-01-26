@@ -19,8 +19,8 @@
 //    }); 
 //});
 $(document).ready(function() {
-    var checkpointCanvas = $('#checkpointCanvas')[0];
-    var checkpointCanvasContext = checkpointCanvas.getContext('2d');
+    var checkpointCanvas = $('#checkpointCanvas');
+    var checkpointCanvasContext = checkpointCanvas[0].getContext('2d');
     
     var jplayer = $("#jquery_jplayer_1").jPlayer({
         ready: function(event) {
@@ -49,9 +49,11 @@ $(document).ready(function() {
     var jPlayerData = $("#jquery_jplayer_1").data('jPlayer');
 
     function canvasMatchProgressBar() {
-        checkpointCanvas.setAttribute('left', $(".jp-progress")
-        checkpointCanvas.setAttribute('height', $(".jp-progress").height());
-        checkpointCanvas.setAttribute('width', $(".jp-progress").width()+6);
+        checkpointCanvas.css('left', $(".jp-progress").position().left - 3);
+        console.log(checkpointCanvas);
+        console.log($(".jp-progress").position().left - 3);
+        checkpointCanvas.css('height', $(".jp-progress").height());
+        checkpointCanvas.css('width', $(".jp-progress").width()+6);
 
     }
     $(window).resize(canvasMatchProgressBar);
