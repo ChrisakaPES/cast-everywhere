@@ -50,8 +50,6 @@ $(document).ready(function () {
 
     function canvasMatchProgressBar() {
         checkpointCanvas.css('left', $(".jp-progress").position().left - 3);
-        console.log(checkpointCanvas);
-        console.log($(".jp-progress").position().left - 3);
         checkpointCanvas.css('height', $(".jp-progress").height());
         checkpointCanvas.css('width', $(".jp-progress").width() + 6);
     }
@@ -66,14 +64,16 @@ $(document).ready(function () {
             podcast: 'Giantbomb Cast'
         });
 
+        var checkpointLocationPoint = $(".jp-progress").width() * (jPlayerData.status.currentPercentAbsolute / 100);
+        console.log($(".jp-progress").width() + " * " + jPlayerData.status.currentPercentAbsolute / 100 + " = " + checkpointLocationPoint);
         checkpointCanvasContext.fillStyle = "#FF0000";
-        checkpointCanvasContext.moveTo(0, 0);
+        checkpointCanvasContext.moveTo(checkpointLocationPoint + 0, 0);
         checkpointCanvasContext.beginPath();
-        checkpointCanvasContext.lineTo(7, 0);
-        checkpointCanvasContext.lineTo(7, 7);
-        checkpointCanvasContext.lineTo(4, 15);
-        checkpointCanvasContext.lineTo(0, 7);
-        checkpointCanvasContext.lineTo(0, 0);
+        checkpointCanvasContext.lineTo(checkpointLocationPoint + 7, 0);
+        checkpointCanvasContext.lineTo(checkpointLocationPoint + 7, 7);
+        checkpointCanvasContext.lineTo(checkpointLocationPoint + 4, 15);
+        checkpointCanvasContext.lineTo(checkpointLocationPoint + 0, 7);
+        checkpointCanvasContext.lineTo(checkpointLocationPoint + 0, 0);
         checkpointCanvasContext.stroke();
         checkpointCanvasContext.closePath();
         checkpointCanvasContext.fill();
