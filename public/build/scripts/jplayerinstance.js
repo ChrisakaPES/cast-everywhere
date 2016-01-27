@@ -58,14 +58,14 @@ $(document).ready(function () {
     $("#bookmarkButton").click(function () {
         console.log("Meow bookmarkButton Pressed");
         console.log(jPlayerData.status.currentTime);
-        var timestamp = jPlayerData.status.currentTime;
+        var timestamp = Math.floor(jPlayerData.status.currentTime);
         $.post('/ajax/addbookmark', {
             currentTime: timestamp,
             podcast: 'Giantbomb Cast'
         });
 
-        var checkpointLocationPoint = $(".jp-progress").width() * (jPlayerData.status.currentPercentAbsolute / 100);
-        console.log($(".jp-progress").width() + " * " + jPlayerData.status.currentPercentAbsolute / 100 + " = " + checkpointLocationPoint);
+        var checkpointLocationPoint = $(".jp-progress").width() * (jPlayerData.status.currentPercentRelative / 100); //3 + $(".jp-play-bar").width();//$(".jp-progress").width() * (Math.floor(jPlayerData.status.currentTime) / jPlayerData.status.duration);
+        console.log("Checkpoint Spot: " + $(".jp-play-bar").width());
         checkpointCanvasContext.fillStyle = "#FF0000";
         checkpointCanvasContext.moveTo(checkpointLocationPoint + 0, 0);
         checkpointCanvasContext.beginPath();
