@@ -15,6 +15,8 @@ app.get('/', routes.index);
 app.get('/register', routes.userRegister);
 app.get('/testaudioplayer', routes.testAudioPlayer);
 
+app.get('/ajax/getcheckpoints', routes.ajaxGetCheckpoints);
+
 app.post('/register', urlencodedParser, routes.userRegisterPost);
 
 app.post('/ajax/addbookmark', urlencodedParser, routes.ajaxAddBookmark);

@@ -48,6 +48,15 @@ exports.ajaxAddBookmark = function (req, res) {
         console.log(newPodcastCheckpoint);
     });
 }
+exports.ajaxGetCheckpoints = function (req, res) {
+    console.log("Get Checkpoint entrance Meow");
+    console.log(req.query);
+    PodcastTimestamp.find({podcastName: 'Giant Bombcast'}, function(err, timestamps) {
+       if(err) return console.error(err);
+        console.log(timestamps);
+        res.json(timestamps);
+    });
+}
 exports.index = function (req,res) {
     var options = {
         root: view_directory,
