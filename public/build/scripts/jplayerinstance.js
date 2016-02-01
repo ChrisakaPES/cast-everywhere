@@ -21,11 +21,13 @@
 $(document).ready(function () {
     var checkpointCanvas = $('#checkpointCanvas');
     var checkpointCanvasContext = checkpointCanvas[0].getContext('2d');
+
     function canvasMatchProgressBar() {
         checkpointCanvas.css('left', $(".jp-progress").position().left - 3);
         checkpointCanvas.css('height', $(".jp-progress").height());
         checkpointCanvas.css('width', $(".jp-progress").width() + 6);
     }
+
     function drawCheckpoint(startingPoint) {
         console.log(startingPoint);
         checkpointCanvasContext.fillStyle = "#FF0000";
@@ -40,6 +42,7 @@ $(document).ready(function () {
         checkpointCanvasContext.closePath();
         checkpointCanvasContext.fill();
     }
+
     function loadCheckpoints(duration) {
         $.getJSON('/ajax/getcheckpoints', {
             title: "Giant Bombcast",
@@ -57,14 +60,14 @@ $(document).ready(function () {
         });
         //console.log(data);
     }
+
     var jplayer = $("#jquery_jplayer_1").jPlayer({
         ready: function (event) {
             $(this).jPlayer("setMedia", {
                 title: "Giant Bombcast",
                 mp3: "http://www.giantbomb.com/podcasts/download/1473/Giant_Bombcast_01_12_2016-01-12-2016-0020062817.mp3"
             });
-            $(this).jPlayer("play");
-            $(this).jPlayer("pause");
+            $(this).jPlayer("load");
             console.log(event.jPlayer.status);
             loadCheckpoints(event.jPlayer.status.duration);
         },
@@ -106,6 +109,6 @@ $(document).ready(function () {
 
     canvasMatchProgressBar();
 
-    //    console.log(jPlayerData.status);
+    console.log(jplayer);
     //    loadCheckpoints(jPlayerData.status.duration)
 });

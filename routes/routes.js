@@ -15,7 +15,11 @@ db.once('open', function (callback) {
 });
 
 //Schemas
-var podcastSchema = mongoose.Schema({});
+var podcastSchema = mongoose.Schema({
+    title: String,
+    rssUrl: String,
+    description: String
+});
 var podcastSubscriptionSchema = mongoose.Schema({});
 var podcastTimestampSchema = mongoose.Schema({
     podcastName: String,
@@ -29,10 +33,40 @@ var userSchema = mongoose.Schema({
 });
 
 var User = mongoose.model('User',userSchema);
+var Podcast = mongoose.model('Podcast', podcastSchema);
 var PodcastTimestamp = mongoose.model('PodcastTimestamp', podcastTimestampSchema);
 
 var view_directory = __dirname.replace('routes', 'views');
 
+exports.addPodcast = function (req, res) {
+    var options = {
+        root: view_directory,
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    }
+    res.sendFile('/add-podcast.html', options);
+}
+exports.addPodcastPost = function (req, res) {
+    var podcastTitle = req.body.title;
+    var podcastUrl = req.body.podcasturl;
+    var podcastDescription = req.body.description;
+    
+    var newPodcast = new Podcast({
+        title: podcastTitle,
+        rssUrl: podcastUrl,
+        description: podcastDescription
+    });
+    newPodcast.save(function (err, newPodcast) {
+        if(err)return console.error(err);
+        console.log("New Podcast Added");
+        console.log(newPodcast);
+        res.redirect(301, '/');
+        
+    });
+}
 exports.ajaxAddBookmark = function (req, res) {
     console.log(req.body);
     var checkpointInSec = req.body.currentTime;

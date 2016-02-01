@@ -12,11 +12,14 @@ app.set('view engine', 'jade');
 var urlencodedParser = bodyParser.urlencoded({extended:false});
 
 app.get('/', routes.index);
+app.get('/addPodcast', routes.addPodcast);
 app.get('/register', routes.userRegister);
 app.get('/testaudioplayer', routes.testAudioPlayer);
 
+
 app.get('/ajax/getcheckpoints', routes.ajaxGetCheckpoints);
 
+app.post('/addPodcast', urlencodedParser, routes.addPodcastPost);
 app.post('/register', urlencodedParser, routes.userRegisterPost);
 
 app.post('/ajax/addbookmark', urlencodedParser, routes.ajaxAddBookmark);
