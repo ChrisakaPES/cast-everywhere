@@ -82,6 +82,17 @@ exports.ajaxAddBookmark = function (req, res) {
         console.log(newPodcastCheckpoint);
     });
 }
+exports.ajaxGetAllPodcasts = function(req, res) {
+    Podcast.find({}, function(err, podcasts) {
+        console.log(podcasts);
+        for(podcast in podcasts) {
+            console.log(podcast);
+            
+        }
+        
+    })
+    
+}
 exports.ajaxGetCheckpoints = function (req, res) {
     console.log("Get Checkpoint entrance Meow");
     console.log(req.query);

@@ -18,6 +18,7 @@ app.get('/testaudioplayer', routes.testAudioPlayer);
 
 
 app.get('/ajax/getcheckpoints', routes.ajaxGetCheckpoints);
+app.get('/ajax/getallpodcasts', routes.ajaxGetAllPodcasts);
 
 app.post('/addPodcast', urlencodedParser, routes.addPodcastPost);
 app.post('/register', urlencodedParser, routes.userRegisterPost);
