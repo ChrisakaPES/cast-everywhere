@@ -87,23 +87,12 @@ exports.ajaxGetAllPodcasts = function(req, res) {
     var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
         //console.log(podcasts);
-        for(podcastIndex in podcasts) {
-            //console.log(podcasts[podcastIndex]);
-            rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
-                if(err)return console.error(err);
-                podcastCollection.push({
-                    description: podcasts[podcastIndex].description,
-                    parsedRSS: parsed,
-                    rssUrl: podcasts[podcastIndex].rssUrl,
-                    title: podcasts[podcastIndex].title
-                });
-                console.log("Parsed Information");
-                //console.log(parsed);
-            });
-        }
-        console.log("Out of look Meow");
+        podcastCollection = collectParsedPodcastRSSInfoToSendViaAJAX(podcasts);
+        
+        
+        console.log("After [Longest Function Name] Meow");
         //console.log("PodcastCollection Meow");
-        //console.log(podcastCollection);
+        console.log(podcastCollection);
         //console.log("PodcastCollection Meow");
         res.json(podcastCollection);
     });
@@ -167,4 +156,23 @@ exports.userRegisterPost = function (req,res) {
         console.log(newUser);
         res.redirect(301, '/');
     });
+}
+
+function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts){
+    var podcastCollection = [];
+    for(podcastIndex in podcasts) {
+        rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
+            if(err)return console.error(err);
+            podcastCollection.push({
+                description: podcasts[podcastIndex].description,
+                parsedRSS: parsed,
+                rssUrl: podcasts[podcastIndex].rssUrl,
+                title: podcasts[podcastIndex].title
+            });
+            console.log("Parsed Information");
+            return podcastCollection;//console.log(parsed);
+        });
+    }
+    console.log("End of [Longest Function Name] meow");
+    //return podcastCollection;
 }
