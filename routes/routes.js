@@ -87,14 +87,14 @@ exports.ajaxGetAllPodcasts = function(req, res) {
     var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
         //console.log(podcasts);
-        podcastCollection = collectParsedPodcastRSSInfoToSendViaAJAX(podcasts);
+        //podcastCollection = collectParsedPodcastRSSInfoToSendViaAJAX(podcasts);
+        podcastCollection = getPodcastDBInfo(podcasts);
         
-        
-        console.log("After [Longest Function Name] Meow");
+        //console.log("After [Longest Function Name] Meow");
         //console.log("PodcastCollection Meow");
-        console.log(podcastCollection);
+        //console.log(podcastCollection);
         //console.log("PodcastCollection Meow");
-        res.json(podcastCollection);
+        //res.json(podcastCollection);
     });
     
 }
@@ -173,6 +173,17 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts){
             return podcastCollection;//console.log(parsed);
         });
     }
-    console.log("End of [Longest Function Name] meow");
+    console.log("End of [Longest Function Name] meow");  
     //return podcastCollection;
+}
+function getPodcastDBInfo(podcasts) {
+    var podcastInfoArray = [];
+    for(var podcastIndex in podcasts) {
+        podcastInfoArray.push({
+                description: podcasts[podcastIndex].description,
+                rssUrl: podcasts[podcastIndex].rssUrl,
+                title: podcasts[podcastIndex].title
+        }); 
+    }
+    return podcastInfoArray;
 }
