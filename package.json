@@ -9,7 +9,8 @@
     "jplayer": "^2.9.2",
     "mongodb-uri": "^0.9.7",
     "mongoose": "^4.3.4",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "rss-parser": "^2.2.4"
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",

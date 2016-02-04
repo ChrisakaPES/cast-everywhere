@@ -1,4 +1,5 @@
 var mongoose = require('mongoose'),
+    rssParser = require('rss-parser'),
     uriUtil = require('mongodb-uri');
 
 var mongodbUri = 'mongodb://ds051740.mongolab.com:51740/capstonedb';
@@ -83,14 +84,29 @@ exports.ajaxAddBookmark = function (req, res) {
     });
 }
 exports.ajaxGetAllPodcasts = function(req, res) {
+    var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
-        console.log(podcasts);
-        for(podcast in podcasts) {
-            console.log(podcast);
-            
+        //console.log(podcasts);
+        for(podcastIndex in podcasts) {
+            //console.log(podcasts[podcastIndex]);
+            rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
+                if(err)return console.error(err);
+                podcastCollection.push({
+                    description: podcasts[podcastIndex].description,
+                    parsedRSS: parsed,
+                    rssUrl: podcasts[podcastIndex].rssUrl,
+                    title: podcasts[podcastIndex].title
+                });
+                console.log("Parsed Information");
+                //console.log(parsed);
+            });
         }
-        
-    })
+        console.log("Out of look Meow");
+        //console.log("PodcastCollection Meow");
+        //console.log(podcastCollection);
+        //console.log("PodcastCollection Meow");
+        res.json(podcastCollection);
+    });
     
 }
 exports.ajaxGetCheckpoints = function (req, res) {
