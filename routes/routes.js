@@ -87,12 +87,15 @@ exports.ajaxGetAllPodcasts = function(req, res) {
     var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
         //console.log(podcasts);
-        //podcastCollection = collectParsedPodcastRSSInfoToSendViaAJAX(podcasts);
-        podcastCollection = getPodcastDBInfo(podcasts);
+        collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, function(collection) {
+            console.log(collection);
+            res.json(collection)    
+        });
+        //podcastCollection = getPodcastDBInfo(podcasts);
         
         //console.log("After [Longest Function Name] Meow");
         //console.log("PodcastCollection Meow");
-        //console.log(podcastCollection);
+        console.log(podcastCollection);
         //console.log("PodcastCollection Meow");
         //res.json(podcastCollection);
     });
@@ -158,23 +161,38 @@ exports.userRegisterPost = function (req,res) {
     });
 }
 
-function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts){
+function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
     var podcastCollection = [];
-    for(podcastIndex in podcasts) {
+    for(var podcastIndex in podcasts) {
+        var podcastEntry = {};
         rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
             if(err)return console.error(err);
-            podcastCollection.push({
+            
+            podcastEntry = {
                 description: podcasts[podcastIndex].description,
                 parsedRSS: parsed,
                 rssUrl: podcasts[podcastIndex].rssUrl,
                 title: podcasts[podcastIndex].title
-            });
+            }
+            setInterval(function() {
+                if(podcastIndex === (podcasts.length -1) && podcastEntry !== {}) {
+                    console.log("End of [Longest Function Name] meow");  
+                    console.log(podcastCollection);
+                    callback(podcastCollection);
+                }
+                podcastCollection.push(podcastEntry);
+            }, 1000);
             console.log("Parsed Information");
-            return podcastCollection;//console.log(parsed);
+            console.log(podcastEntry);
+            if(podcastIndex === (podcasts.length -1)) {
+                console.log("End of [Longest Function Name] meow");  
+                console.log(podcastCollection);
+                callback(podcastCollection);
+            }
         });
+        
     }
-    console.log("End of [Longest Function Name] meow");  
-    //return podcastCollection;
+
 }
 function getPodcastDBInfo(podcasts) {
     var podcastInfoArray = [];
@@ -187,3 +205,4 @@ function getPodcastDBInfo(podcasts) {
     }
     return podcastInfoArray;
 }
+
