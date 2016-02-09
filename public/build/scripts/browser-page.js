@@ -34,7 +34,7 @@ var PodcastTileArray = React.createClass({
 
     render: function () {
         var podcastNodes = this.props.podcasts.map(function (podcast) {
-            return React.createElement(PodcastTileListing, { podastInfo: podcast });
+            return React.createElement(PodcastTileListing, { podcastInfo: podcast });
         });
         return React.createElement(
             'div',

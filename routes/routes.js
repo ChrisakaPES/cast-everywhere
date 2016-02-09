@@ -170,7 +170,29 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
     for(podcastIndex in podcasts) {
         console.log(""+ podcastIndex + " meow");
         
-        podcastCollection.push({
+        
+        //rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
+        //    if(err)return console.error(err);
+        //    console.log("" + podcastIndex + " URL: " + podcasts[podcastIndex].rssUrl);
+        //    podcastCollection.push({
+        //        description: podcasts[podcastIndex].description,
+        //        parsedRSS: parsed,
+        //        rssUrl: podcasts[podcastIndex].rssUrl,
+        //        title: podcasts[podcastIndex].title
+        //    });
+        //    //console.log("Parsed Information");
+        //    //console.log(podcastCollection);
+        //    //console.log(podcasts.length);
+        //});
+        
+//        if(podcastIndex === (podcasts.length -1)) {
+//            console.log("End of [Longest Function Name] meow");  
+//            console.log(podcastCollection);
+//            callback(podcastCollection);
+//        }
+        
+    }
+    podcastCollection.push({
             feed: {
                 title: "Giant Bombcast",
                 description: "The Giant Bomb staff discuss the latest video game news and new releases, taste-test questionable beverages, and get wildly off-topic in this weekly podcast.",
@@ -258,25 +280,8 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
                 }]
             }
         });
-        //rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
-        //    if(err)return console.error(err);
-        //    console.log("" + podcastIndex + " URL: " + podcasts[podcastIndex].rssUrl);
-        //    podcastCollection.push({
-        //        description: podcasts[podcastIndex].description,
-        //        parsedRSS: parsed,
-        //        rssUrl: podcasts[podcastIndex].rssUrl,
-        //        title: podcasts[podcastIndex].title
-        //    });
-        //    //console.log("Parsed Information");
-        //    //console.log(podcastCollection);
-        //    //console.log(podcasts.length);
-        //});
-        if(podcastIndex === (podcasts.length -1)) {
-            console.log("End of [Longest Function Name] meow");  
-            console.log(podcastCollection);
-            callback(podcastCollection);
-        }
-    }
+        
+        callback(podcastCollection);
 //    setInterval(function() {
 //        if(podcastIndex === (podcasts.length -1)) {
 //            console.log("End of [Longest Function Name] meow");  
