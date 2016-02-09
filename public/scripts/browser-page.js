@@ -20,7 +20,7 @@ var BrowserComponent = React.createClass({
     render: function() {
         return (
             <div className="test-background">
-                Meow
+                <PodcastTileArray podcasts={this.state.data} />
             </div>
             
         )    
@@ -28,8 +28,31 @@ var BrowserComponent = React.createClass({
     }
     
 });
-//var PodcastTileArray = React.createClass({
-//    render
-//})
+
+var PodcastTileArray = React.createClass({
+    render: function() {
+        var podcastNodes = this.props.podcasts.map(function(podcast) {
+            return (
+                <PodcastTileListing podastInfo={podcast} /> 
+            )
+        });
+        return (
+            <div className="podcast-tile-array">
+                {podcastNodes}
+            </div>
+        )
+    }
+});
+var PodcastTileListing = React.createClass({
+    render: function() {
+        console.log(this.props.podcastInfo);
+        return (
+            <div className="podcast-tile">
+                <img src={this.props.podcastInfo.feed.image.url} />
+            </div>
+        )
+    }
+        
+});
 ReactDOM.render(<BrowserComponent />,
         document.getElementById('main-content'));

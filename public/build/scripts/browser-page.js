@@ -23,12 +23,37 @@ var BrowserComponent = React.createClass({
         return React.createElement(
             'div',
             { className: 'test-background' },
-            'Meow'
+            React.createElement(PodcastTileArray, { podcasts: this.state.data })
         );
     }
 
 });
-//var PodcastTileArray = React.createClass({
-//    render
-//})
+
+var PodcastTileArray = React.createClass({
+    displayName: 'PodcastTileArray',
+
+    render: function () {
+        var podcastNodes = this.props.podcasts.map(function (podcast) {
+            return React.createElement(PodcastTileListing, { podastInfo: podcast });
+        });
+        return React.createElement(
+            'div',
+            { className: 'podcast-tile-array' },
+            podcastNodes
+        );
+    }
+});
+var PodcastTileListing = React.createClass({
+    displayName: 'PodcastTileListing',
+
+    render: function () {
+        console.log(this.props.podcastInfo);
+        return React.createElement(
+            'div',
+            { className: 'podcast-tile' },
+            React.createElement('img', { src: this.props.podcastInfo.feed.image.url })
+        );
+    }
+
+});
 ReactDOM.render(React.createElement(BrowserComponent, null), document.getElementById('main-content'));
