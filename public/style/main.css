@@ -75,6 +75,10 @@ body {
 .no-margin {
     margin: 0;
 }
+.podcast-episode-table {
+    display: none;
+    position: absolute;
+}
 .podcast-tile {
     border: 1px #000000 solid;
     display: inline-block;

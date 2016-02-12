@@ -1,4 +1,6 @@
 var React = React;
+var console = console;
+var document = document;
 var BrowserComponent = React.createClass({
     getInitialState: function() {
         return{data: []};
@@ -23,11 +25,8 @@ var BrowserComponent = React.createClass({
             <div className="test-background">
                 <PodcastTileArray podcasts={this.state.data} />
             </div>
-            
         );    
-    
     }
-    
 });
 
 var PodcastTileArray = React.createClass({
@@ -46,8 +45,6 @@ var PodcastTileArray = React.createClass({
 });
 var PodcastTileListing = React.createClass({
     displayDescription: function(event) {
-        console.log("Podcast Description Meow");
-        console.log(event);
         var imageContainer = event.currentTarget;
         var descriptionDiv = imageContainer.getElementsByTagName('div')[0];
         descriptionDiv.style.display = "block";
@@ -55,9 +52,18 @@ var PodcastTileListing = React.createClass({
     }.bind(this),
     expandPodcastEntryList: function(event) {
         console.log("Podcast Tile Clicked Meow");
-        console.log(event);
+        var tables = document.getElementsByTagName('table')
+        console.log(tables);
+        for(var tableIndex in tables) {
+            console.log(tables[tableIndex]);
+            if(tables[tableIndex].style.display !== 'none') {
+                tables[tableIndex].style.display = 'none';
+            }
+        }
         var tile = event.currentTarget;
         tile.style.height = (tile.style.height !== "500px") ? "500px" : "350px";
+        var podcastEpisodeTable = tile.getElementsByTagName('table');
+        podcastEpisodeTable.style.display = 'block';
     
     }.bind(this),
     hideDescription: function(event) {
@@ -81,12 +87,30 @@ var PodcastTileListing = React.createClass({
         
 });
 var PodcastEpisodeListings = React.createClass({
+    selectPodcastEpisode: function(event) {
+        
+    }.bind(this),
     render: function() {
         var episodeNodes = this.props.episodes.map(function (episode, i) {
-            return;
+            return (
+            <tr onClick={this.selectPodcastEpisode} key={i}>
+                    <td>{episode.title}</td>
+                    <td>{episode.pubDate}</td>
+                    <input type="hidden" name="episodeURL" value={episode.enclosure.url}></input>
+                    <input type="hidden" name="episodeLength" value={episode.enclosure.length}></input>
+                    <input type="hidden" name="episodeType" value={episode.enclosure.url}></input>
+                </tr>
+            );
         });
         return (
-            <div></div>
+            <table className="podcast-episode-table">
+                <tr>
+                    <th>Title</th>
+                    <th>Publish Date</th>
+                </tr>
+                {episodeNodes}
+            
+            </table>
         );
     }
 });

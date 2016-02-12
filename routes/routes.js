@@ -90,7 +90,7 @@ exports.ajaxGetAllPodcasts = function(req, res) {
         collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, function(collection) {
             console.log("Anonymous Function meow");
             console.log(collection);
-            res.json(collection)    
+            res.json(collection);    
         });
         //podcastCollection = getPodcastDBInfo(podcasts);
         
