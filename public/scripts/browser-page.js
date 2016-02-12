@@ -1,3 +1,4 @@
+var React = React;
 var BrowserComponent = React.createClass({
     getInitialState: function() {
         return{data: []};
@@ -9,7 +10,7 @@ var BrowserComponent = React.createClass({
               cache: false,
               success: function(data) {
                 console.log("Data pulled from RSS feed");
-                console.log(data)
+                console.log(data);
                 this.setState({data: data});
               }.bind(this),
               error: function(xhr, status, err) {
@@ -23,7 +24,7 @@ var BrowserComponent = React.createClass({
                 <PodcastTileArray podcasts={this.state.data} />
             </div>
             
-        )    
+        );    
     
     }
     
@@ -34,19 +35,19 @@ var PodcastTileArray = React.createClass({
         var podcastNodes = this.props.podcasts.map(function(podcast, i) {
             return (
                 <PodcastTileListing key={i} podcastInfo={podcast} /> 
-            )
+            );
         });
         return (
             <div className="podcast-tile-array">
                 {podcastNodes}
             </div>
-        )
+        );
     }
 });
 var PodcastTileListing = React.createClass({
-    displayDescription: function() {
+    displayDescription: function(event) {
         console.log("Podcast Description Meow");
-        console.log(this);
+        console.log(event);
         
     }.bind(this),
     expandPodcastEntryList: function(element, podcastEntries) {
@@ -57,7 +58,7 @@ var PodcastTileListing = React.createClass({
     }.bind(this),
     hideDescription: function() {
         
-    },
+    }.bind(this),
     render: function() {
         console.log(this.props.podcastInfo);
         return (
@@ -68,7 +69,7 @@ var PodcastTileListing = React.createClass({
                 </div>
                 <h2 className="no-margin">{this.props.podcastInfo.feed.title}</h2>
             </div>
-        )
+        );
     }
         
 });

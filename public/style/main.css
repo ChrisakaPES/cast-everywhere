@@ -76,9 +76,11 @@ body {
     margin: 0;
 }
 .podcast-tile {
+    border: 1px #000000 solid;
+    display: inline-block;
     height:350px;
     width:300px;
-    border: 1px #000000 solid;
+    
 }
 .podcast-description, .podcast-image {
     display: block;

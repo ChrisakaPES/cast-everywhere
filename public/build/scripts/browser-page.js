@@ -1,3 +1,4 @@
+var React = React;
 var BrowserComponent = React.createClass({
     displayName: 'BrowserComponent',
 
@@ -46,16 +47,16 @@ var PodcastTileArray = React.createClass({
 var PodcastTileListing = React.createClass({
     displayName: 'PodcastTileListing',
 
-    displayDescription: function () {
+    displayDescription: function (event) {
         console.log("Podcast Description Meow");
-        console.log(this);
+        console.log(event);
     }.bind(this),
     expandPodcastEntryList: function (element, podcastEntries) {
         console.log("Podcast Tile Clicked Meow");
         console.log(element);
         console.log(podcastEntries);
     }.bind(this),
-    hideDescription: function () {},
+    hideDescription: function () {}.bind(this),
     render: function () {
         console.log(this.props.podcastInfo);
         return React.createElement(
