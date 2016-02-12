@@ -79,15 +79,20 @@ body {
     border: 1px #000000 solid;
     display: inline-block;
     height:350px;
+    margin: 30px;
     width:300px;
     
 }
 .podcast-description, .podcast-image {
     display: block;
     height:300px;
+    position: absolute;
     width:300px;
 }
 .podcast-description {
+    background-color: rgba(115, 115, 115, .9);
+    color: #FFFFFF;
+    padding: 10px 10px 0 10px;
     display: none;
     z-index:10;
 }

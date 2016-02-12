@@ -50,18 +50,26 @@ var PodcastTileListing = React.createClass({
     displayDescription: function (event) {
         console.log("Podcast Description Meow");
         console.log(event);
+        var imageContainer = event.currentTarget;
+        var descriptionDiv = imageContainer.getElementsByTagName('div')[0];
+        descriptionDiv.style.display = "block";
     }.bind(this),
-    expandPodcastEntryList: function (element, podcastEntries) {
+    expandPodcastEntryList: function (event) {
         console.log("Podcast Tile Clicked Meow");
-        console.log(element);
-        console.log(podcastEntries);
+        console.log(event);
+        var tile = event.currentTarget;
+        tile.style.height = tile.style.height !== "500px" ? "500px" : "350px";
     }.bind(this),
-    hideDescription: function () {}.bind(this),
+    hideDescription: function (event) {
+        var imageContainer = event.currentTarget;
+        var descriptionDiv = imageContainer.getElementsByTagName('div')[0];
+        descriptionDiv.style.display = "none";
+    }.bind(this),
     render: function () {
         console.log(this.props.podcastInfo);
         return React.createElement(
             'div',
-            { className: 'podcast-tile', onclick: this.expandPodcastEntryList(this, this.props.podcastInfo.entries) },
+            { className: 'podcast-tile', onClick: this.expandPodcastEntryList },
             React.createElement(
                 'div',
                 { className: 'image-overlay-container', onMouseOver: this.displayDescription, onMouseOut: this.hideDescription },
@@ -76,9 +84,20 @@ var PodcastTileListing = React.createClass({
                 'h2',
                 { className: 'no-margin' },
                 this.props.podcastInfo.feed.title
-            )
+            ),
+            React.createElement(PodcastEpisodeListings, { episodes: this.props.podcastInfo.feed.entries })
         );
     }
 
+});
+var PodcastEpisodeListings = React.createClass({
+    displayName: 'PodcastEpisodeListings',
+
+    render: function () {
+        var episodeNodes = this.props.episodes.map(function (episode, i) {
+            return;
+        });
+        return React.createElement('div', null);
+    }
 });
 ReactDOM.render(React.createElement(BrowserComponent, null), document.getElementById('main-content'));

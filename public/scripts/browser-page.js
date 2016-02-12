@@ -48,30 +48,47 @@ var PodcastTileListing = React.createClass({
     displayDescription: function(event) {
         console.log("Podcast Description Meow");
         console.log(event);
+        var imageContainer = event.currentTarget;
+        var descriptionDiv = imageContainer.getElementsByTagName('div')[0];
+        descriptionDiv.style.display = "block";
         
     }.bind(this),
-    expandPodcastEntryList: function(element, podcastEntries) {
+    expandPodcastEntryList: function(event) {
         console.log("Podcast Tile Clicked Meow");
-        console.log(element);
-        console.log(podcastEntries);
+        console.log(event);
+        var tile = event.currentTarget;
+        tile.style.height = (tile.style.height !== "500px") ? "500px" : "350px";
     
     }.bind(this),
-    hideDescription: function() {
-        
+    hideDescription: function(event) {
+        var imageContainer = event.currentTarget;
+        var descriptionDiv = imageContainer.getElementsByTagName('div')[0];
+        descriptionDiv.style.display = "none";
     }.bind(this),
     render: function() {
         console.log(this.props.podcastInfo);
         return (
-            <div className="podcast-tile" onclick={this.expandPodcastEntryList(this, this.props.podcastInfo.entries)}>
+            <div className="podcast-tile" onClick={this.expandPodcastEntryList}>
                 <div className="image-overlay-container" onMouseOver={this.displayDescription} onMouseOut={this.hideDescription}>
                     <img className="podcast-image"  src={this.props.podcastInfo.feed.image.url} />
                     <div className="podcast-description">{this.props.podcastInfo.feed.description}</div>
                 </div>
                 <h2 className="no-margin">{this.props.podcastInfo.feed.title}</h2>
+                <PodcastEpisodeListings episodes={this.props.podcastInfo.feed.entries}/>
             </div>
         );
     }
         
+});
+var PodcastEpisodeListings = React.createClass({
+    render: function() {
+        var episodeNodes = this.props.episodes.map(function (episode, i) {
+            return;
+        });
+        return (
+            <div></div>
+        );
+    }
 });
 ReactDOM.render(<BrowserComponent />,
         document.getElementById('main-content'));
