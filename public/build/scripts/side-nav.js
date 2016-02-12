@@ -7,54 +7,54 @@ var SideNav = React.createClass({
             { className: "pure-menu" },
             React.createElement(
                 "a",
-                { "class": "pure-menu-heading", href: "/" },
+                { className: "pure-menu-heading", href: "/" },
                 "Cast Everywhere"
             ),
             React.createElement(
                 "ul",
-                { "class": "pure-menu-list" },
+                { className: "pure-menu-list" },
                 React.createElement(
                     "li",
-                    { "class": "pure-menu-item" },
+                    { className: "pure-menu-item" },
                     React.createElement(
                         "a",
-                        { href: "/", "class": "pure-menu-link" },
+                        { href: "/", className: "pure-menu-link" },
                         "Step 1"
                     )
                 ),
                 React.createElement(
                     "li",
-                    { "class": "pure-menu-item" },
+                    { className: "pure-menu-item" },
                     React.createElement(
                         "a",
-                        { href: "step2", "class": "pure-menu-link" },
+                        { href: "step2", className: "pure-menu-link" },
                         "Step 2"
                     )
                 ),
                 React.createElement(
                     "li",
-                    { "class": "pure-menu-item", "class": "menu-item-divided pure-menu-selected" },
+                    { className: "pure-menu-item menu-item-divided pure-menu-selected" },
                     React.createElement(
                         "a",
-                        { href: "step3", "class": "pure-menu-link" },
+                        { href: "step3", className: "pure-menu-link" },
                         "Step 3"
                     )
                 ),
                 React.createElement(
                     "li",
-                    { "class": "pure-menu-item" },
+                    { className: "pure-menu-item" },
                     React.createElement(
                         "a",
-                        { href: "step4", "class": "pure-menu-link" },
+                        { href: "step4", className: "pure-menu-link" },
                         "Step 4"
                     )
                 ),
                 React.createElement(
                     "li",
-                    { "class": "pure-menu-item" },
+                    { className: "pure-menu-item" },
                     React.createElement(
                         "a",
-                        { href: "step5", "class": "pure-menu-link" },
+                        { href: "step5", className: "pure-menu-link" },
                         "Step 5"
                     )
                 )
@@ -63,4 +63,4 @@ var SideNav = React.createClass({
     }
 });
 
-ReactDOM.render(React.createElement(SideNav, null), document.getElementById("side-nav"));
+ReactDOM.render(React.createElement(SideNav, null), document.getElementById("menu"));

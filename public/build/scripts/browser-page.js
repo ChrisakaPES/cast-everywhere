@@ -33,8 +33,8 @@ var PodcastTileArray = React.createClass({
     displayName: 'PodcastTileArray',
 
     render: function () {
-        var podcastNodes = this.props.podcasts.map(function (podcast) {
-            return React.createElement(PodcastTileListing, { podcastInfo: podcast });
+        var podcastNodes = this.props.podcasts.map(function (podcast, i) {
+            return React.createElement(PodcastTileListing, { key: i, podcastInfo: podcast });
         });
         return React.createElement(
             'div',
@@ -46,12 +46,36 @@ var PodcastTileArray = React.createClass({
 var PodcastTileListing = React.createClass({
     displayName: 'PodcastTileListing',
 
+    displayDescription: function () {
+        console.log("Podcast Description Meow");
+        console.log(this);
+    }.bind(this),
+    expandPodcastEntryList: function (element, podcastEntries) {
+        console.log("Podcast Tile Clicked Meow");
+        console.log(element);
+        console.log(podcastEntries);
+    }.bind(this),
+    hideDescription: function () {},
     render: function () {
         console.log(this.props.podcastInfo);
         return React.createElement(
             'div',
-            { className: 'podcast-tile' },
-            React.createElement('img', { src: this.props.podcastInfo.feed.image.url })
+            { className: 'podcast-tile', onclick: this.expandPodcastEntryList(this, this.props.podcastInfo.entries) },
+            React.createElement(
+                'div',
+                { className: 'image-overlay-container', onMouseOver: this.displayDescription, onMouseOut: this.hideDescription },
+                React.createElement('img', { className: 'podcast-image', src: this.props.podcastInfo.feed.image.url }),
+                React.createElement(
+                    'div',
+                    { className: 'podcast-description' },
+                    this.props.podcastInfo.feed.description
+                )
+            ),
+            React.createElement(
+                'h2',
+                { className: 'no-margin' },
+                this.props.podcastInfo.feed.title
+            )
         );
     }
 

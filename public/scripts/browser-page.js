@@ -31,9 +31,9 @@ var BrowserComponent = React.createClass({
 
 var PodcastTileArray = React.createClass({
     render: function() {
-        var podcastNodes = this.props.podcasts.map(function(podcast) {
+        var podcastNodes = this.props.podcasts.map(function(podcast, i) {
             return (
-                <PodcastTileListing podcastInfo={podcast} /> 
+                <PodcastTileListing key={i} podcastInfo={podcast} /> 
             )
         });
         return (
@@ -44,11 +44,29 @@ var PodcastTileArray = React.createClass({
     }
 });
 var PodcastTileListing = React.createClass({
+    displayDescription: function() {
+        console.log("Podcast Description Meow");
+        console.log(this);
+        
+    }.bind(this),
+    expandPodcastEntryList: function(element, podcastEntries) {
+        console.log("Podcast Tile Clicked Meow");
+        console.log(element);
+        console.log(podcastEntries);
+    
+    }.bind(this),
+    hideDescription: function() {
+        
+    },
     render: function() {
         console.log(this.props.podcastInfo);
         return (
-            <div className="podcast-tile">
-                <img src={this.props.podcastInfo.feed.image.url} />
+            <div className="podcast-tile" onclick={this.expandPodcastEntryList(this, this.props.podcastInfo.entries)}>
+                <div className="image-overlay-container" onMouseOver={this.displayDescription} onMouseOut={this.hideDescription}>
+                    <img className="podcast-image"  src={this.props.podcastInfo.feed.image.url} />
+                    <div className="podcast-description">{this.props.podcastInfo.feed.description}</div>
+                </div>
+                <h2 className="no-margin">{this.props.podcastInfo.feed.title}</h2>
             </div>
         )
     }
