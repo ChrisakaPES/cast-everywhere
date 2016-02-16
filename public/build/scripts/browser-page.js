@@ -55,18 +55,36 @@ var PodcastTileListing = React.createClass({
     }.bind(this),
     expandPodcastEntryList: function (event) {
         console.log("Podcast Tile Clicked Meow");
-        var tables = document.getElementsByTagName('table');
-        console.log(tables);
-        for (var tableIndex in tables) {
-            console.log(tables[tableIndex]);
-            if (tables[tableIndex].style.display !== 'none') {
-                tables[tableIndex].style.display = 'none';
+        //Determine if currently clicked tile should expand or collapse at end of function
+        var shouldTileExpand = false;
+        var tile = event.currentTarget;
+
+        if (tile.className.indexOf('tile-collapsed') !== -1) {
+            console.log("tile should Expand Meow");
+            shouldTileExpand = true;
+        }
+
+        //close all open Tiles by searching all tiles and collapsing tables and tiles that are open
+        var tiles = document.getElementsByClassName('podcast-tile');
+
+        for (var tI = 0; tI < tiles.length; tI++) {
+            //Maybe look for a way to break out of this as soon as a tile is changed (it is unlikely that more than one would be open at a time.
+            if (tiles[tI].className.indexOf('tile-expanded') !== -1) {
+                var tableOfExpandedTile = tiles[tI].getElementsByClassName('podcast-episode-table')[0];
+                tableOfExpandedTile.className = tableOfExpandedTile.className.replace(/(?:^|\s)table-expanded(?!\S)/g, ' table-collapsed');
+                tiles[tI].className = tiles[tI].className.replace(/(?:^|\s)tile-expanded(?!\S)/g, ' tile-collapsed');
+                break;
             }
         }
-        var tile = event.currentTarget;
-        tile.style.height = tile.style.height !== "500px" ? "500px" : "350px";
-        var podcastEpisodeTable = tile.getElementsByTagName('table');
-        podcastEpisodeTable.style.display = 'block';
+
+        //open current tile if tile was closed prior to closing of all tiles
+        if (shouldTileExpand) {
+            if (tile.className.indexOf('tile-collapsed') !== -1) {
+                tile.className = tile.className.replace(/(?:^|\s)tile-collapsed(?!\S)/g, ' tile-expanded');
+                var tableOfTile = tile.getElementsByClassName('podcast-episode-table')[0];
+                tableOfTile.className = tableOfTile.className.replace(/(?:^|\s)table-collapsed(?!\S)/g, ' table-expanded');
+            }
+        }
     }.bind(this),
     hideDescription: function (event) {
         var imageContainer = event.currentTarget;
@@ -77,7 +95,7 @@ var PodcastTileListing = React.createClass({
         console.log(this.props.podcastInfo);
         return React.createElement(
             'div',
-            { className: 'podcast-tile', onClick: this.expandPodcastEntryList },
+            { className: 'podcast-tile tile-collapsed', onClick: this.expandPodcastEntryList },
             React.createElement(
                 'div',
                 { className: 'image-overlay-container', onMouseOver: this.displayDescription, onMouseOut: this.hideDescription },
@@ -124,22 +142,30 @@ var PodcastEpisodeListings = React.createClass({
         });
         return React.createElement(
             'table',
-            { className: 'podcast-episode-table' },
+            { className: 'podcast-episode-table pure-table pure-table-horizontal table-collapsed' },
             React.createElement(
-                'tr',
+                'thead',
                 null,
                 React.createElement(
-                    'th',
+                    'tr',
                     null,
-                    'Title'
-                ),
-                React.createElement(
-                    'th',
-                    null,
-                    'Publish Date'
+                    React.createElement(
+                        'th',
+                        null,
+                        'Title'
+                    ),
+                    React.createElement(
+                        'th',
+                        null,
+                        'Publish Date'
+                    )
                 )
             ),
-            episodeNodes
+            React.createElement(
+                'tbody',
+                null,
+                episodeNodes
+            )
         );
     }
 });
