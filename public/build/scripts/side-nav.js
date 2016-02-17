@@ -19,7 +19,7 @@ var SideNav = React.createClass({
                     React.createElement(
                         "a",
                         { href: "/", className: "pure-menu-link" },
-                        "Step 1"
+                        "Discover"
                     )
                 ),
                 React.createElement(
@@ -28,7 +28,7 @@ var SideNav = React.createClass({
                     React.createElement(
                         "a",
                         { href: "step2", className: "pure-menu-link" },
-                        "Step 2"
+                        "Subscriptions"
                     )
                 ),
                 React.createElement(
@@ -55,7 +55,7 @@ var SideNav = React.createClass({
                     React.createElement(
                         "a",
                         { href: "step5", className: "pure-menu-link" },
-                        "Step 5"
+                        "Options"
                     )
                 )
             )

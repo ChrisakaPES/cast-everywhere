@@ -63,7 +63,6 @@ var PodcastTileListing = React.createClass({
             console.log("tile should Expand Meow");
             shouldTileExpand = true;
         }
-
         //close all open Tiles by searching all tiles and collapsing tables and tiles that are open
         var tiles = document.getElementsByClassName('podcast-tile');
 
@@ -76,7 +75,6 @@ var PodcastTileListing = React.createClass({
                 break;
             }
         }
-
         //open current tile if tile was closed prior to closing of all tiles
         if (shouldTileExpand) {
             if (tile.className.indexOf('tile-collapsed') !== -1) {

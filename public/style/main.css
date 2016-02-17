@@ -8,13 +8,11 @@
     font-family: "Titillium";
     src: url("Titillium/Titillium-bold.otf");
     font-weight: bold;
-    font-style: normal:
-}
-* {
-    box-sizing: border-box;   
+    font-style: normal;
 }
 body {
     background-color: #F5FFE1;
+    box-sizing: border-box;
     font-family: "Titillium";
 }
 .bookmark-button {
@@ -52,7 +50,6 @@ body {
     width:300px;
     
 }
-
 .navbar {
     color: #FFFFFF;
     height:3em;
@@ -84,8 +81,8 @@ body {
 .podcast-description {
     background-color: rgba(115, 115, 115, .9);
     color: #FFFFFF;
-    padding: 10px 10px 0 10px;
     display: none;
+    padding: 10px 10px 0 10px;
     z-index:10;
 }
 .podcast-episode-table {
@@ -93,19 +90,24 @@ body {
     position: absolute;
     z-index: 50;
 }
+.podcast-episode-table thead {
+    width: 85%;   
+}
 .podcast-tile {
-    border: 1px #000000 solid;
     display: inline-block;
-    margin: 30px;
+    margin: 2% 3%;
     width:300px;
     
 }
 .pure-g [class*="pure-u"] {
     font-family: "Titillium";   
 }
+.pure-table tr {
+    width: 86%;   
+}
 .siteid {
-    font-weight: bold;
     font-size: 3em;
+    font-weight: bold;
     margin: 0 auto;
     width: 80%;  
 }
@@ -130,11 +132,9 @@ body {
 }
 .table-expanded {
     display:block;
-    left:20%;
     padding-top: 5%;
     position: absolute;
-    
-    width:80%;
+    width:85%;
 }
 #example {
     margin: 0 auto;
@@ -144,20 +144,26 @@ body {
     position:relative;
     width:100%;
 }
-
+#main-content {
+    display: inline-block; 
+    position: fixed;
+    right: 0;
+    width: 85%;   
+}
 /*============Nav css================== */
 
 #menu {
-    margin-left: -150px; /* "#menu" width */
-    width: 150px;
+    background: #191818;
+    bottom: 0;
+    display: inline-block;
+    height:100%;
+    left: 0;
+    overflow-y: auto;
     position: fixed;
     top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 1000; /* so the menu or its navicon stays above all content */
-    background: #191818;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    width: 14%;
+    z-index: 1000; /* so the menu or its navicon stays above all content */
 }
     /*
     All anchors inside the menu should be styled like this.
