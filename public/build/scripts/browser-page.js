@@ -118,9 +118,8 @@ var PodcastEpisodeListings = React.createClass({
     displayName: 'PodcastEpisodeListings',
 
     selectPodcastEpisode: function (event) {
-        console.log("Episode Selected");
         var inputs = event.currentTarget.getElementsByTagName('input');
-        var urlToLoad, lengthOfEpisode, episodeType;
+        var urlToLoad, lengthOfEpisode, episodeType, episodeName;
         for (var i = 0; i < inputs.length; i++) {
             switch (inputs[i].name) {
                 case 'episodeURL':
@@ -132,11 +131,16 @@ var PodcastEpisodeListings = React.createClass({
                 case 'episodeType':
                     episodeType = inputs[i].value;
                     break;
+                case 'episodeTitle':
+                    episodeName = inputs[i].value;
+                    break;
             }
         }
-        //        jplayer.jPlayer( "setMedia", {
-        //            mp3: urlToLoad
-        //        }).jPlayer("play");
+        console.log(urlToLoad + ': ' + lengthOfEpisode + ', ' + episodeType);
+        jplayerDiv.jPlayer("setMedia", {
+            title: episodeName,
+            mp3: urlToLoad
+        }).jPlayer("play");
     }.bind(this),
     render: function () {
         var episodeNodes = this.props.episodes.map(function (episode, i) {
@@ -154,9 +158,10 @@ var PodcastEpisodeListings = React.createClass({
                     null,
                     episode.pubDate
                 ),
+                React.createElement('input', { type: 'hidden', name: 'episodeTitle', value: episode.title }),
                 React.createElement('input', { type: 'hidden', name: 'episodeURL', value: episode.enclosure.url }),
                 React.createElement('input', { type: 'hidden', name: 'episodeLength', value: episode.enclosure.length }),
-                React.createElement('input', { type: 'hidden', name: 'episodeType', value: episode.enclosure.url })
+                React.createElement('input', { type: 'hidden', name: 'episodeType', value: episode.enclosure.type })
             );
         }.bind(this));
         return React.createElement(

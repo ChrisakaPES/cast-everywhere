@@ -104,9 +104,8 @@ var PodcastTileListing = React.createClass({
 });
 var PodcastEpisodeListings = React.createClass({
     selectPodcastEpisode: function(event) {
-        console.log("Episode Selected");
         var inputs = event.currentTarget.getElementsByTagName('input');
-        var urlToLoad, lengthOfEpisode, episodeType;
+        var urlToLoad, lengthOfEpisode, episodeType, episodeName;
         for(var i = 0; i< inputs.length; i++) {
             switch(inputs[i].name) {
                 case 'episodeURL': 
@@ -118,11 +117,16 @@ var PodcastEpisodeListings = React.createClass({
                 case 'episodeType':
                     episodeType = inputs[i].value;
                     break;
+                case 'episodeTitle':
+                    episodeName = inputs[i].value;
+                    break;
             }
         }
-//        jplayer.jPlayer( "setMedia", {
-//            mp3: urlToLoad
-//        }).jPlayer("play");
+        console.log(urlToLoad + ': ' + lengthOfEpisode + ', ' + episodeType);
+        jplayerDiv.jPlayer( "setMedia", {
+            title: episodeName,
+            mp3: urlToLoad
+        }).jPlayer("play");
          
     }.bind(this),
     render: function() {
@@ -132,9 +136,10 @@ var PodcastEpisodeListings = React.createClass({
             <tr onClick={this.selectPodcastEpisode} key={i}>
                     <td>{episode.title}</td>
                     <td>{episode.pubDate}</td>
+                    <input type="hidden" name="episodeTitle" value={episode.title}></input>
                     <input type="hidden" name="episodeURL" value={episode.enclosure.url}></input>
                     <input type="hidden" name="episodeLength" value={episode.enclosure.length}></input>
-                    <input type="hidden" name="episodeType" value={episode.enclosure.url}></input>
+                    <input type="hidden" name="episodeType" value={episode.enclosure.type}></input>
                 </tr>
             );
         }.bind(this));
