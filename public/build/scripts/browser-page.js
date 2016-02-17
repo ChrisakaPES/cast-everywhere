@@ -57,7 +57,7 @@ var PodcastTileListing = React.createClass({
         console.log("Podcast Tile Clicked Meow");
         //Determine if currently clicked tile should expand or collapse at end of function
         var shouldTileExpand = false;
-        var tile = event.currentTarget;
+        var tile = event.currentTarget.parentElement;
 
         if (tile.className.indexOf('tile-collapsed') !== -1) {
             console.log("tile should Expand Meow");
@@ -93,10 +93,10 @@ var PodcastTileListing = React.createClass({
         console.log(this.props.podcastInfo);
         return React.createElement(
             'div',
-            { className: 'podcast-tile tile-collapsed', onClick: this.expandPodcastEntryList },
+            { className: 'podcast-tile tile-collapsed' },
             React.createElement(
                 'div',
-                { className: 'image-overlay-container', onMouseOver: this.displayDescription, onMouseOut: this.hideDescription },
+                { className: 'image-overlay-container', onClick: this.expandPodcastEntryList, onMouseOver: this.displayDescription, onMouseOut: this.hideDescription },
                 React.createElement('img', { className: 'podcast-image', src: this.props.podcastInfo.feed.image.url }),
                 React.createElement(
                     'div',
@@ -117,9 +117,30 @@ var PodcastTileListing = React.createClass({
 var PodcastEpisodeListings = React.createClass({
     displayName: 'PodcastEpisodeListings',
 
-    selectPodcastEpisode: function (event) {}.bind(this),
+    selectPodcastEpisode: function (event) {
+        console.log("Episode Selected");
+        var inputs = event.currentTarget.getElementsByTagName('input');
+        var urlToLoad, lengthOfEpisode, episodeType;
+        for (var i = 0; i < inputs.length; i++) {
+            switch (inputs[i].name) {
+                case 'episodeURL':
+                    urlToLoad = inputs[i].value;
+                    break;
+                case 'episodeLength':
+                    lengthOfEpisode = inputs[i].value;
+                    break;
+                case 'episodeType':
+                    episodeType = inputs[i].value;
+                    break;
+            }
+        }
+        //        jplayer.jPlayer( "setMedia", {
+        //            mp3: urlToLoad
+        //        }).jPlayer("play");
+    }.bind(this),
     render: function () {
         var episodeNodes = this.props.episodes.map(function (episode, i) {
+            if (i > 30) return;
             return React.createElement(
                 'tr',
                 { onClick: this.selectPodcastEpisode, key: i },
@@ -137,7 +158,7 @@ var PodcastEpisodeListings = React.createClass({
                 React.createElement('input', { type: 'hidden', name: 'episodeLength', value: episode.enclosure.length }),
                 React.createElement('input', { type: 'hidden', name: 'episodeType', value: episode.enclosure.url })
             );
-        });
+        }.bind(this));
         return React.createElement(
             'table',
             { className: 'podcast-episode-table pure-table pure-table-horizontal table-collapsed' },

@@ -28,7 +28,7 @@ body {
 }
 .bottom-of-page {
     bottom:0;
-    position:absolute;
+    position: fixed;
     width: 100%;
 }
 .checkpoint-canvas {
@@ -80,6 +80,7 @@ body {
 }
 .podcast-description {
     background-color: rgba(115, 115, 115, .9);
+    box-sizing: padding-box;
     color: #FFFFFF;
     display: none;
     padding: 10px 10px 0 10px;
@@ -132,7 +133,7 @@ body {
 }
 .table-expanded {
     display:block;
-    padding-top: 5%;
+    padding-top: 0;
     position: absolute;
     width:85%;
 }
@@ -163,7 +164,7 @@ body {
     top: 0;
     -webkit-overflow-scrolling: touch;
     width: 14%;
-    z-index: 1000; /* so the menu or its navicon stays above all content */
+    z-index: -1; /* so the menu or its navicon stays above all content */
 }
     /*
     All anchors inside the menu should be styled like this.

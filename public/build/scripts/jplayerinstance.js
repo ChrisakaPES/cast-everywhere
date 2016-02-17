@@ -18,6 +18,7 @@
 //        toggleDuration: true
 //    });
 //});
+var jplayer;
 $(document).ready(function () {
     var checkpointCanvas = $('#checkpointCanvas');
     var checkpointCanvasContext = checkpointCanvas[0].getContext('2d');
@@ -61,7 +62,7 @@ $(document).ready(function () {
         //console.log(data);
     }
 
-    var jplayer = $("#jquery_jplayer_1").jPlayer({
+    jplayer = $("#jquery_jplayer_1").jPlayer({
         ready: function (event) {
             $(this).jPlayer("setMedia", {
                 title: "Giant Bombcast",

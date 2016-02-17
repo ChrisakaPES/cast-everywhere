@@ -52,5 +52,5 @@ var TestAudioPlayer = React.createClass({
 });
 ReactDOM.render(
     <TestAudioPlayer />,
-    document.getElementById('main-content')
+    document.getElementById('player-div')
 );

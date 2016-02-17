@@ -126,4 +126,4 @@ var TestAudioPlayer = React.createClass({
         );
     }
 });
-ReactDOM.render(React.createElement(TestAudioPlayer, null), document.getElementById('main-content'));
+ReactDOM.render(React.createElement(TestAudioPlayer, null), document.getElementById('player-div'));
