@@ -86,28 +86,22 @@ exports.ajaxAddBookmark = function (req, res) {
 exports.ajaxGetAllPodcasts = function(req, res) {
     var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
-        //console.log(podcasts);
         collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, function(collection) {
-            //console.log("Anonymous Function meow");
-            console.log(collection);
-            while(collection.length != podcasts.length) {
-                res.json(collection);
-            }
-            //res.json(collection);    
+//            console.log("Anonymous Function meow");
+//            console.log(collection);
+//            while(collection.length != podcasts.length) {
+//                res.json(collection);
+//            }
+//            res.json(collection);
+            res.json(collection);
         });
-        //podcastCollection = getPodcastDBInfo(podcasts);
         
-        //console.log("After [Longest Function Name] Meow");
-        //console.log("PodcastCollection Meow");
-        //console.log(podcastCollection);
-        //console.log("PodcastCollection Meow");
-        //res.json(podcastCollection);
     });
     
 }
 exports.ajaxGetCheckpoints = function (req, res) {
-    console.log("Get Checkpoint entrance Meow");
-    console.log(req.query);
+//    console.log("Get Checkpoint entrance Meow");
+//    console.log(req.query);
     PodcastTimestamp.find({podcastName: 'Giant Bombcast'}, function(err, timestamps) {
        if(err) return console.error(err);
         //console.log(timestamps);
@@ -141,9 +135,9 @@ exports.userRegister = function (req,res) {
     var options = {
         root: view_directory,
         dotfiles: 'deny',
-        headers: {
+        headers: {  
             'x-timestamp': Date.now(),
-            'x-sent':true
+            'x-sent': true
         }
     }
     res.sendFile('/user-register.html', options);
@@ -166,21 +160,23 @@ exports.userRegisterPost = function (req,res) {
 }
 
 function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
-    console.log("Entrance of [Longest Function Name] meow");
+    //console.log("Entrance of [Longest Function Name] meow");
     var podcastCollection = [];
-    var podcastEntry = {};
+    var numPodcastFeedsToPull = podcasts.length;
+    var rssFeedPulled = 0;
     //console.log(podcasts);
     for(var i = 0; i < podcasts.length; i++) {
-        console.info(podcasts[i]);
+        //console.info(podcasts[i]);
         rssParser.parseURL(podcasts[i].rssUrl, function(err, parsed) {
             if(err)return console.error('RSSParser Error: ' + err);
-            podcastCollection.push({
-                //description: podcasts[i].description,
-                parsedRSS: parsed,
-                //rssUrl: podcasts[i].rssUrl,
-                //title: podcasts[i].title
-            });
-        });
+            //console.log(parsed.feed);
+            podcastCollection.push(parsed.feed);
+            rssFeedPulled++;
+            if(rssFeedPulled === numPodcastFeedsToPull) {
+                callback(podcastCollection);   
+            }
+                
+        }); 
         
     }
 //    podcastCollection.push({
@@ -271,7 +267,7 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
 //                }]
 //            }
 //        });
-    callback(podcastCollection);
+    
     
 }
 function getPodcastDBInfo(podcasts) {

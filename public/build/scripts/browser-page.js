@@ -97,19 +97,19 @@ var PodcastTileListing = React.createClass({
             React.createElement(
                 'div',
                 { className: 'image-overlay-container', onClick: this.expandPodcastEntryList, onMouseOver: this.displayDescription, onMouseOut: this.hideDescription },
-                React.createElement('img', { className: 'podcast-image', src: this.props.podcastInfo.feed.image.url }),
+                React.createElement('img', { className: 'podcast-image', src: this.props.podcastInfo.image.url }),
                 React.createElement(
                     'div',
                     { className: 'podcast-description' },
-                    this.props.podcastInfo.feed.description
+                    this.props.podcastInfo.description
                 )
             ),
             React.createElement(
                 'h2',
                 { className: 'no-margin' },
-                this.props.podcastInfo.feed.title
+                this.props.podcastInfo.title
             ),
-            React.createElement(PodcastEpisodeListings, { episodes: this.props.podcastInfo.feed.entries })
+            React.createElement(PodcastEpisodeListings, { episodes: this.props.podcastInfo.entries })
         );
     }
 

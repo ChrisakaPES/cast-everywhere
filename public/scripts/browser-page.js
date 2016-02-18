@@ -92,11 +92,11 @@ var PodcastTileListing = React.createClass({
         return (
             <div className="podcast-tile tile-collapsed" >
                 <div className="image-overlay-container" onClick={this.expandPodcastEntryList} onMouseOver={this.displayDescription} onMouseOut={this.hideDescription}>
-                    <img className="podcast-image"  src={this.props.podcastInfo.feed.image.url} />
-                    <div className="podcast-description">{this.props.podcastInfo.feed.description}</div>
+                    <img className="podcast-image"  src={this.props.podcastInfo.image.url} />
+                    <div className="podcast-description">{this.props.podcastInfo.description}</div>
                 </div>
-                <h2 className="no-margin">{this.props.podcastInfo.feed.title}</h2>
-                <PodcastEpisodeListings episodes={this.props.podcastInfo.feed.entries}/>
+                <h2 className="no-margin">{this.props.podcastInfo.title}</h2>
+                <PodcastEpisodeListings episodes={this.props.podcastInfo.entries}/>
             </div>
         );
     }
