@@ -88,9 +88,12 @@ exports.ajaxGetAllPodcasts = function(req, res) {
     Podcast.find({}, function(err, podcasts) {
         //console.log(podcasts);
         collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, function(collection) {
-            console.log("Anonymous Function meow");
+            //console.log("Anonymous Function meow");
             console.log(collection);
-            res.json(collection);    
+            while(collection.length != podcasts.length) {
+                res.json(collection);
+            }
+            //res.json(collection);    
         });
         //podcastCollection = getPodcastDBInfo(podcasts);
         
@@ -107,7 +110,7 @@ exports.ajaxGetCheckpoints = function (req, res) {
     console.log(req.query);
     PodcastTimestamp.find({podcastName: 'Giant Bombcast'}, function(err, timestamps) {
        if(err) return console.error(err);
-        console.log(timestamps);
+        //console.log(timestamps);
         res.json(timestamps);
     });
 }
@@ -166,130 +169,110 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
     console.log("Entrance of [Longest Function Name] meow");
     var podcastCollection = [];
     var podcastEntry = {};
-    console.log(podcasts);
-    for(podcastIndex in podcasts) {
-        console.log(""+ podcastIndex + " meow");
-        
-        
-        //rssParser.parseURL(podcasts[podcastIndex].rssUrl, function(err, parsed) {
-        //    if(err)return console.error(err);
-        //    console.log("" + podcastIndex + " URL: " + podcasts[podcastIndex].rssUrl);
-        //    podcastCollection.push({
-        //        description: podcasts[podcastIndex].description,
-        //        parsedRSS: parsed,
-        //        rssUrl: podcasts[podcastIndex].rssUrl,
-        //        title: podcasts[podcastIndex].title
-        //    });
-        //    //console.log("Parsed Information");
-        //    //console.log(podcastCollection);
-        //    //console.log(podcasts.length);
-        //});
-        
-//        if(podcastIndex === (podcasts.length -1)) {
-//            console.log("End of [Longest Function Name] meow");  
-//            console.log(podcastCollection);
-//            callback(podcastCollection);
-//        }
+    //console.log(podcasts);
+    for(var i = 0; i < podcasts.length; i++) {
+        console.info(podcasts[i]);
+        rssParser.parseURL(podcasts[i].rssUrl, function(err, parsed) {
+            if(err)return console.error('RSSParser Error: ' + err);
+            podcastCollection.push({
+                //description: podcasts[i].description,
+                parsedRSS: parsed,
+                //rssUrl: podcasts[i].rssUrl,
+                //title: podcasts[i].title
+            });
+        });
         
     }
-    podcastCollection.push({
-            feed: {
-                title: "Giant Bombcast",
-                description: "The Giant Bomb staff discuss the latest video game news and new releases, taste-test questionable beverages, and get wildly off-topic in this weekly podcast.",
-                image: {
-                    title: "Giant Bombcast",
-                    url: "http://static.giantbomb.com/uploads/original/20/202777/2761597-giant+bombcast.png",
-                    width:144,
-                    height:144
-                },
-                entries: [{
-                    title: "Giant Bombcast 02/02/2016",
-                    enclosure: {
-                        url: "http://www.giantbomb.com/podcasts/download/1494/Giant_Bombcast_02_02_2016-02-02-2016-7667832768.mp3",
-                        length:10414,
-                        type: "audio/mpeg"
-                    },
-                    link: "http://www.giantbomb.com/podcasts/giant-bombcast-02022016/1600-1494/",
-                    description: "This week from the new studio: Jason mourns the last Street Fighter V beta; Dan has begun to bear Witness; Brad really likes the mood lighting; Jeff has thoughts on Mario. All this plus your emails!",
-                    pubDate: "Tue, 02 Feb 2016 14:30:00 PST"
-                },{
-                    title: "Giant Bombcast 01/26/2016",
-                    enclosure: {
-                        url: "http://www.giantbomb.com/podcasts/download/1486/Giant_Bombcast_01_26_2016-01-26-2016-9949472309.mp3",
-                        length:7813,
-                        type: "audio/mpeg"
-                    },
-                    link: "http://www.giantbomb.com/podcasts/giant-bombcast-01262016/1600-1486/",
-                    description: "We&#039;ve been doing a lot of Witnessing and we&#039;re very excited about it, but that doesn&#039;t mean we forgot about Sony reorgs, mysterious Konami vans, fighting game failures, in-game crosshairs, questionable root beer, or mobile apps made by certain controversi",
-                    pubDate: "Tue, 26 Jan 2016 17:15:00 PST" 
-                }, {
-                    title: "Giant Bombcast 01/19/2016",
-                    enclosure: {
-                        url: "http://www.giantbomb.com/podcasts/download/1480/Giant_Bombcast_01_19_2016-01-19-2016-9682693335.mp3",
-                        length:10165,
-                        type: "audio/mpeg"
-                    },
-                    link: "http://www.giantbomb.com/podcasts/giant-bombcast-01192016/1600-1480/",
-                    description: "Come for the handy tips on bathing your infant, stay for the lively chat about drinking at work, &quot;getting&quot; Resident Evil, plumbing the Darkest Dungeon, busting up Hitman, dredging up the Ninja Turtles, and chugging a 40 faster than anyone you know!",
-                    pubDate: "Tue, 19 Jan 2016 17:15:00 PST"   
+//    podcastCollection.push({
+//            feed: {
+//                title: "Giant Bombcast",
+//                description: "The Giant Bomb staff discuss the latest video game news and new releases, taste-test questionable beverages, and get wildly off-topic in this weekly podcast.",
+//                image: {
+//                    title: "Giant Bombcast",
+//                    url: "http://static.giantbomb.com/uploads/original/20/202777/2761597-giant+bombcast.png",
+//                    width:144,
+//                    height:144
+//                },
+//                entries: [{
+//                    title: "Giant Bombcast 02/02/2016",
+//                    enclosure: {
+//                        url: "http://www.giantbomb.com/podcasts/download/1494/Giant_Bombcast_02_02_2016-02-02-2016-7667832768.mp3",
+//                        length:10414,
+//                        type: "audio/mpeg"
+//                    },
+//                    link: "http://www.giantbomb.com/podcasts/giant-bombcast-02022016/1600-1494/",
+//                    description: "This week from the new studio: Jason mourns the last Street Fighter V beta; Dan has begun to bear Witness; Brad really likes the mood lighting; Jeff has thoughts on Mario. All this plus your emails!",
+//                    pubDate: "Tue, 02 Feb 2016 14:30:00 PST"
+//                },{
+//                    title: "Giant Bombcast 01/26/2016",
+//                    enclosure: {
+//                        url: "http://www.giantbomb.com/podcasts/download/1486/Giant_Bombcast_01_26_2016-01-26-2016-9949472309.mp3",
+//                        length:7813,
+//                        type: "audio/mpeg"
+//                    },
+//                    link: "http://www.giantbomb.com/podcasts/giant-bombcast-01262016/1600-1486/",
+//                    description: "We&#039;ve been doing a lot of Witnessing and we&#039;re very excited about it, but that doesn&#039;t mean we forgot about Sony reorgs, mysterious Konami vans, fighting game failures, in-game crosshairs, questionable root beer, or mobile apps made by certain controversi",
+//                    pubDate: "Tue, 26 Jan 2016 17:15:00 PST" 
+//                }, {
+//                    title: "Giant Bombcast 01/19/2016",
+//                    enclosure: {
+//                        url: "http://www.giantbomb.com/podcasts/download/1480/Giant_Bombcast_01_19_2016-01-19-2016-9682693335.mp3",
+//                        length:10165,
+//                        type: "audio/mpeg"
+//                    },
+//                    link: "http://www.giantbomb.com/podcasts/giant-bombcast-01192016/1600-1480/",
+//                    description: "Come for the handy tips on bathing your infant, stay for the lively chat about drinking at work, &quot;getting&quot; Resident Evil, plumbing the Darkest Dungeon, busting up Hitman, dredging up the Ninja Turtles, and chugging a 40 faster than anyone you know!",
+//                    pubDate: "Tue, 19 Jan 2016 17:15:00 PST"   
                     
-                }]
-            }
-        });
-        podcastCollection.push({
-            feed: {
-                title: "The Giant Beastcast",
-                description: "The Giant Bomb East team gathers to talk about the week in video games, their lives, and basically anything that interests them. All from New York City!",
-                image: {
-                    title: "The Giant Beastcast",
-                    url: "http://static.giantbomb.com/uploads/original/0/31/2750982-beastcast_itunes.png",
-                    width:144,
-                    height:144
-                },
-                entries: [{
-                    title: "The Giant Beastcast - Episode 37",
-                    enclosure: {
-                        url: "http://www.giantbomb.com/podcasts/download/1497/Ep37_-_The_Giant_Beastcast-02-04-2016-5339695080.mp3",
-                        length:7914,
-                        type: "audio/mpeg"
-                    },
-                    link: "http://www.giantbomb.com/podcasts/the-giant-beastcast-episode-37/1600-1497/",
-                    description: "Alex simulates his dreams of being an American trucker, we share our different experiences with The Witness, and we go deep on The Division. Also, we go over bathroom talking etiquette because there&#039;s always time for that.",
-                    pubDate: "Fri, 05 Feb 2016 03:00:00 PST"
-                },{
-                    title: "The Giant Beastcast - Episode 36",
-                    enclosure: {
-                        url: "http://www.giantbomb.com/podcasts/download/1489/Ep36_-_The_Giant_Beastcast-01-29-2016-9516669667.mp3",
-                        length:8748,
-                        type: "audio/mpeg"
-                    },
-                    link: "http://www.giantbomb.com/podcasts/the-giant-beastcast-episode-36/1600-1489/",
-                    description: "We&#039;re back after sacrificing some time to the podcast gods. We&#039;ve got EA making E3 news, Sony make Sony moves, and GameStop doesn&#039;t just want to sell you games they want to publish them too.",
-                    pubDate: "Fri, 29 Jan 2016 12:00:00 PST " 
-                }, {
-                    title: "The Giant Beastcast - Episode 35",
-                    enclosure: {
-                        url: "http://www.giantbomb.com/podcasts/download/1483/Ep35_-_The_Giant_Beastcast-01-21-2016-0424099036.mp3",
-                        length:6820,
-                        type: "audio/mpeg"
-                    },
-                    link: "http://www.giantbomb.com/podcasts/the-giant-beastcast-episode-35/1600-1483/",
-                    description: "Sure, we talk about Deserts of Kharak, Oxenfree, and other video games but don&#039;t be fooled. This is not a video game podcast. It&#039;s a podcast about milk, weather forecasts, and Star Wars cakes.",
-                    pubDate: "Fri, 22 Jan 2016 03:00:00 PST"   
+//                }]
+//            }
+//        });
+//        podcastCollection.push({
+//            feed: {
+//                title: "The Giant Beastcast",
+//                description: "The Giant Bomb East team gathers to talk about the week in video games, their lives, and basically anything that interests them. All from New York City!",
+//                image: {
+//                    title: "The Giant Beastcast",
+//                    url: "http://static.giantbomb.com/uploads/original/0/31/2750982-beastcast_itunes.png",
+//                    width:144,
+//                    height:144
+//                },
+//                entries: [{
+//                    title: "The Giant Beastcast - Episode 37",
+//                    enclosure: {
+//                        url: "http://www.giantbomb.com/podcasts/download/1497/Ep37_-_The_Giant_Beastcast-02-04-2016-5339695080.mp3",
+//                        length:7914,
+//                        type: "audio/mpeg"
+//                    },
+//                    link: "http://www.giantbomb.com/podcasts/the-giant-beastcast-episode-37/1600-1497/",
+//                    description: "Alex simulates his dreams of being an American trucker, we share our different experiences with The Witness, and we go deep on The Division. Also, we go over bathroom talking etiquette because there&#039;s always time for that.",
+//                    pubDate: "Fri, 05 Feb 2016 03:00:00 PST"
+//                },{
+//                    title: "The Giant Beastcast - Episode 36",
+//                    enclosure: {
+//                        url: "http://www.giantbomb.com/podcasts/download/1489/Ep36_-_The_Giant_Beastcast-01-29-2016-9516669667.mp3",
+//                        length:8748,
+//                        type: "audio/mpeg"
+//                    },
+//                    link: "http://www.giantbomb.com/podcasts/the-giant-beastcast-episode-36/1600-1489/",
+//                    description: "We&#039;re back after sacrificing some time to the podcast gods. We&#039;ve got EA making E3 news, Sony make Sony moves, and GameStop doesn&#039;t just want to sell you games they want to publish them too.",
+//                    pubDate: "Fri, 29 Jan 2016 12:00:00 PST " 
+//                }, {
+//                    title: "The Giant Beastcast - Episode 35",
+//                    enclosure: {
+//                        url: "http://www.giantbomb.com/podcasts/download/1483/Ep35_-_The_Giant_Beastcast-01-21-2016-0424099036.mp3",
+//                        length:6820,
+//                        type: "audio/mpeg"
+//                    },
+//                    link: "http://www.giantbomb.com/podcasts/the-giant-beastcast-episode-35/1600-1483/",
+//                    description: "Sure, we talk about Deserts of Kharak, Oxenfree, and other video games but don&#039;t be fooled. This is not a video game podcast. It&#039;s a podcast about milk, weather forecasts, and Star Wars cakes.",
+//                    pubDate: "Fri, 22 Jan 2016 03:00:00 PST"   
                     
-                }]
-            }
-        });
-        
-        callback(podcastCollection);
-//    setInterval(function() {
-//        if(podcastIndex === (podcasts.length -1)) {
-//            console.log("End of [Longest Function Name] meow");  
-//            console.log(podcastCollection);
-//            callback(podcastCollection);
-//        }
-//    }, 5000);
-
+//                }]
+//            }
+//        });
+    callback(podcastCollection);
+    
 }
 function getPodcastDBInfo(podcasts) {
     var podcastInfoArray = [];
