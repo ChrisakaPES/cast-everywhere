@@ -119,6 +119,16 @@ exports.index = function (req,res) {
     }
     res.sendFile('/index.html', options);   
 }
+exports.getLoggedInUser = function (req, res) {
+    if(req.session.user && req.session.user.isAuthenticated) {
+        res.json(req.session.user);    
+    } else {
+        res.json({
+            isAuthenticated: false,
+            username: 'NoLoggedInUser'
+        });
+    }
+}
 exports.testAudioPlayer = function(req,res) {
     var options = {
         root: view_directory,
@@ -130,6 +140,42 @@ exports.testAudioPlayer = function(req,res) {
     }
     
     res.sendFile('/test-audio-player.html', options);
+}
+exports.userLogin = function (req, res) {
+    var options = {
+        root: view_directory,
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    }
+    res.sendFile('/user-login.html', options);
+}
+exports.userLoginPost = function(req, res) {
+    var usernameSubmission = req.body.username,
+        passwordSubmission = req.body.password;
+    var isLoginAttemptValid = false;
+    
+    var userToLogin = User.findOne({
+        name: usernameSubmission   
+    }, function(err, user) {
+        if(err) return console.error(err);
+        if(user) {
+            isLoginAttemptValid = user.password == passwordSubmission);
+            if(isLoginAttemptValid) {
+                req.session.user = {
+                    isAuthenticated: true,
+                    userId: user._id,
+                    username: req.body.username
+                }
+                res.redirect(301, '/');
+            }
+        }
+        if(!isLoginAttemptValid) {
+            res.redirect(301, '/login');   
+        }
+    });
 }
 exports.userRegister = function (req,res) {
     var options = {

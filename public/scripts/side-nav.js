@@ -1,4 +1,26 @@
 var SideNav = React.createClass({
+    componentDidMount: function() {
+        //this.isUserLoggedIn();   
+    },
+    getInitialState: function() {
+        return {user: {}}  
+    },
+    isUserLoggedIn() {
+        //Complete This one sessions are done
+        $.ajax({
+            url: '/ajax/',
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                console.log("Data pulled from RSS feed");
+                console.log(data);
+                this.setState({data: data});
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });  
+    },
     render: function () {
         return (
             <div className="pure-menu">
