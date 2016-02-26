@@ -1,5 +1,5 @@
-var UserRegisterForm = React.createClass({
-    displayName: "UserRegisterForm",
+var UserLoginForm = React.createClass({
+    displayName: "UserLoginForm",
 
     render: function () {
         return React.createElement(
@@ -8,18 +8,18 @@ var UserRegisterForm = React.createClass({
             React.createElement(
                 "h1",
                 null,
-                " Register "
+                "Log-in"
             ),
             React.createElement(
                 "form",
-                { method: "post", action: "/register", className: "pure-form pure-form-aligned" },
+                { method: "post", action: "/login", className: "pure-form pure-form-aligned" },
                 React.createElement(
                     "div",
                     { className: "pure-control-group" },
                     React.createElement(
                         "label",
                         { htmlFor: "username" },
-                        "Username: "
+                        "Username:"
                     ),
                     React.createElement("input", { type: "text", name: "username", placeholder: "Username" })
                 ),
@@ -29,7 +29,7 @@ var UserRegisterForm = React.createClass({
                     React.createElement(
                         "label",
                         { htmlFor: "password" },
-                        "Password: "
+                        "Password:"
                     ),
                     React.createElement("input", { type: "password", name: "password", placeholder: "Password" })
                 ),
@@ -38,18 +38,19 @@ var UserRegisterForm = React.createClass({
                     { className: "pure-control-group" },
                     React.createElement(
                         "label",
-                        { htmlFor: "email" },
-                        "Email: "
+                        { htmlFor: "rememberme" },
+                        "Remember Me"
                     ),
-                    React.createElement("input", { type: "text", name: "email", placeholder: "Email Address" })
+                    React.createElement("input", { type: "checkbox", name: "rememberme" })
                 ),
                 React.createElement(
                     "button",
                     { type: "submit", className: "pure-button pure-button-primary center-button" },
-                    "Register"
+                    " Log In "
                 )
             )
         );
     }
 });
-ReactDOM.render(React.createElement(UserRegisterForm, null), document.getElementById('main-content'));
+
+ReactDOM.render(React.createElement(UserLoginForm, null), document.getElementById('main-content'));

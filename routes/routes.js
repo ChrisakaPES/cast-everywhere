@@ -1,4 +1,4 @@
-var mongoose = require('mongoose'),
+    var mongoose = require('mongoose'),
     rssParser = require('rss-parser'),
     uriUtil = require('mongodb-uri');
 
@@ -29,7 +29,10 @@ var podcastTimestampSchema = mongoose.Schema({
 var userSchema = mongoose.Schema({
     name: String,
     email: String,
-    password: String
+    password: String,
+    subscriptions: [{
+        podcastID: String   
+    }]
     
 });
 
@@ -39,6 +42,14 @@ var PodcastTimestamp = mongoose.model('PodcastTimestamp', podcastTimestampSchema
 
 var view_directory = __dirname.replace('routes', 'views');
 
+exports.accessChecker = function (req, res, next) {
+    if(req.session.user && req.session.user.isAuthenticated) {
+        //do something perhaps
+        next();
+    } else {
+        res.redirect('/login');   
+    }
+}
 exports.addPodcast = function (req, res) {
     var options = {
         root: view_directory,
@@ -87,12 +98,6 @@ exports.ajaxGetAllPodcasts = function(req, res) {
     var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
         collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, function(collection) {
-//            console.log("Anonymous Function meow");
-//            console.log(collection);
-//            while(collection.length != podcasts.length) {
-//                res.json(collection);
-//            }
-//            res.json(collection);
             res.json(collection);
         });
         
@@ -107,6 +112,46 @@ exports.ajaxGetCheckpoints = function (req, res) {
         //console.log(timestamps);
         res.json(timestamps);
     });
+}
+exports.ajaxGetSubscribedPodcasts = function(req,res) {
+    //pull in subscribed Podcasts
+}
+exports.ajaxGetSubscriptionStatus = function (req, res) {
+    var podcastId = req.body.podcastId,
+         userId = req.body.userId;
+    User.findOne({_id: userId}, function(err, user) {
+        if(err) return console.error(err);
+        if(user) {
+            var subscriptions = user.subscriptions;
+            for(var i = 0; i < subscriptions.length; i++) {
+                if(subscriptions.podcastId === podcastId) {
+                    res.json({isSubscribed: true})   
+                }
+            }
+            res.json({isSubscribed: false});
+        }
+    });
+}
+exports.ajaxToggleSubscription = function (req, res) {
+    var podcastId = req.body.podcastId,
+        userId = req.body.userId;
+    var userBeingUpdated = User.findOne({_id: userId}, function(err, user) {
+        if(err) return console.error(err);
+        if(user) {
+            var subscriptions = user.subscriptions;
+            for(var i = 0; i < subscriptions.length; i++) {
+                if(subscriptions.podcastId === podcastId) {
+                    user.subscriptions.splice(i, 1);//removing from subscription list
+                    res.json({isSubscribed: false})   
+                }
+            }
+            user.subscriptions.push({podcastId: podcastId});//adding the podcast to the Subscription
+            res.json({isSubscribed: true});
+        }
+    }).save(function(err, userToSave) {
+        if(err) return console.error(err);   
+    });
+                                        
 }
 exports.index = function (req,res) {
     var options = {
@@ -129,6 +174,18 @@ exports.getLoggedInUser = function (req, res) {
         });
     }
 }
+exports.mySubscriptions = function (req, res) {
+    var options = {
+        root: view_directory,
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent':true    
+        }
+    }
+    res.sendFile('/my-subscriptions.html', options);
+}
+
 exports.testAudioPlayer = function(req,res) {
     var options = {
         root: view_directory,
@@ -138,7 +195,6 @@ exports.testAudioPlayer = function(req,res) {
             'x-sent':true    
         }
     }
-    
     res.sendFile('/test-audio-player.html', options);
 }
 exports.userLogin = function (req, res) {
@@ -162,7 +218,7 @@ exports.userLoginPost = function(req, res) {
     }, function(err, user) {
         if(err) return console.error(err);
         if(user) {
-            isLoginAttemptValid = user.password == passwordSubmission);
+            isLoginAttemptValid = user.password == passwordSubmission;
             if(isLoginAttemptValid) {
                 req.session.user = {
                     isAuthenticated: true,
@@ -176,6 +232,10 @@ exports.userLoginPost = function(req, res) {
             res.redirect(301, '/login');   
         }
     });
+}
+exports.userLogout = function(req, res) {
+    req.session.user = {};
+    res.redirect(301, '/');
 }
 exports.userRegister = function (req,res) {
     var options = {
@@ -210,17 +270,22 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
     var podcastCollection = [];
     var numPodcastFeedsToPull = podcasts.length;
     var rssFeedPulled = 0;
+    var podcastEntry = {};
     //console.log(podcasts);
     for(var i = 0; i < podcasts.length; i++) {
+        podcastEntry.id = podcasts[i]._id;
         //console.info(podcasts[i]);
         rssParser.parseURL(podcasts[i].rssUrl, function(err, parsed) {
             if(err)return console.error('RSSParser Error: ' + err);
             //console.log(parsed.feed);
-            podcastCollection.push(parsed.feed);
+            
+            podcastEntry.feed = parsed.feed;
+            podcastCollection.push(podcastEntry);
             rssFeedPulled++;
             if(rssFeedPulled === numPodcastFeedsToPull) {
                 callback(podcastCollection);   
             }
+            podcastEntry = {};
                 
         }); 
         

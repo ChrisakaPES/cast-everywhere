@@ -31,6 +31,15 @@ body {
     position: fixed;
     width: 100%;
 }
+.center-button {
+    display: block;
+    margin: 10px auto;
+    width:200px;   
+}
+.center-form {
+    margin: 0 auto;
+    width: 400px;
+}
 .checkpoint-canvas {
     background-color:aqua;
     left:15%;
@@ -122,12 +131,10 @@ body {
     color:#000000;
     text-decoration: none;
 }
-.tile-collapsed {
-    height: 350px;
-    
-}
-.tile-expanded {
-    height: 600px;
+.subscription-button {
+    bottom: -257px;
+    position: relative;
+    z-index:11;
     
 }
 .table-collapsed {
@@ -143,6 +150,13 @@ body {
     position: absolute;
     width:100%;
 }
+.tile-collapsed {
+    height: 350px;
+}
+.tile-expanded {
+    height: 600px;    
+}
+
 #example {
     margin: 0 auto;
     width:80%;

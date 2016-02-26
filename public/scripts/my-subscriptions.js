@@ -7,7 +7,7 @@ var BrowserComponent = React.createClass({
     },
     componentDidMount: function () {
         $.ajax({
-            url: '/ajax/getallpodcasts',
+            url: '/ajax/getsubscribedpodcasts',
             dataType: 'json',
             cache: false,
             success: function (data) {
@@ -172,7 +172,7 @@ var SubscriptionButton = React.createClass({
         }
         return (
             <div>
-                <button type="submit" onClick={this.handleSubscription} className="pure-button pure-button-primary center-button subscription-button">Subscribe
+                <button type="submit" onClick={this.handleSubscription} className="pure-button pure-button-primary center-button">Subscribe
                     <input type="hidden" value={this.props.podcastId}/>
                 </button> 
             </div>
