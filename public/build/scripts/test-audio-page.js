@@ -6,6 +6,7 @@ var TestAudioPlayer = React.createClass({
             "section",
             { className: "bottom-of-page" },
             React.createElement("div", { id: "jquery_jplayer_1", className: "jp-jplayer" }),
+            React.createElement("input", { id: "hiddenInputForPodcastId", type: "hidden", value: "" }),
             React.createElement(
                 "div",
                 { id: "jp_container_1", className: "jp-audio", role: "application", "aria-label": "media player" },
@@ -101,7 +102,7 @@ var TestAudioPlayer = React.createClass({
                         { className: "jp-details" },
                         React.createElement(
                             "div",
-                            { className: "jp-title", "aria-label": "title" },
+                            { id: "podcastTitleDiv", className: "jp-title", "aria-label": "title" },
                             " "
                         )
                     ),

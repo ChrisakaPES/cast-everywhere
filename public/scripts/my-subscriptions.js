@@ -10,6 +10,7 @@ var BrowserComponent = React.createClass({
             url: '/ajax/getsubscribedpodcasts',
             dataType: 'json',
             cache: false,
+            type: 'GET',
             success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
@@ -108,11 +109,11 @@ var PodcastTileListing = React.createClass({
                 <div className="image-overlay-container" onClick={this.expandPodcastEntryList} onMouseOver={this.displayDescription} onMouseOut={this.hideDescription}>
                     <img className="podcast-image"  src={this.props.podcastInfo.feed.image.url} />
                     <div className="podcast-description">{this.props.podcastInfo.feed.description}</div>
-                    <SubscriptionButton user={this.props.user} podcastId={this.props.podcastInfo.id} />
+                    <SubscriptionButton user={this.props.user} podcastId={this.props.podcastInfo._id} />
                     
                 </div>
                 <h2 className="no-margin">{this.props.podcastInfo.feed.title}</h2>
-                <PodcastEpisodeListings episodes={this.props.podcastInfo.feed.entries}/>
+                <PodcastEpisodeListings episodes={this.props.podcastInfo.feed.entries} podcastId={this.props.podcastInfo._id}/>
             </div>
         );
     }
@@ -124,10 +125,11 @@ var SubscriptionButton = React.createClass({
             url: '/ajax/getsubscriptionstatus',
             data: {
                 podcastId: this.props.podcastId,
-                userId: this.props.user.id
+                userId: this.props.user.userId
             },
             dataType: 'json',
             cache: false,
+            type: "POST",
             success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
@@ -154,6 +156,7 @@ var SubscriptionButton = React.createClass({
             },
             dataType: 'json',
             cache: false,
+            type: 'POST',
             success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
@@ -165,14 +168,17 @@ var SubscriptionButton = React.createClass({
         });  
     },
     render: function() {
+        var buttonText;
         if(this.state.isSubscribed) {
             //display a button to unsubscribe to podcast
+            buttonText = 'Unsubscribe';
         } else {
-            //display a button that subscribes to podcast   
+            //display a button that subscribes to podcast
+            buttonText = 'Subscribe';
         }
         return (
             <div>
-                <button type="submit" onClick={this.handleSubscription} className="pure-button pure-button-primary center-button">Subscribe
+                <button type="submit" onClick={this.handleSubscription} className="pure-button pure-button-primary center-button subscription-button">{buttonText}
                     <input type="hidden" value={this.props.podcastId}/>
                 </button> 
             </div>
@@ -204,7 +210,8 @@ var PodcastEpisodeListings = React.createClass({
             title: episodeName,
             mp3: urlToLoad
         }).jPlayer("play");
-         
+        var podcastId= this.props.podcastId;
+        document.getElementById('hiddenInputForPodcastId').value = podcastId;
     }.bind(this),
     render: function() {
         var episodeNodes = this.props.episodes.map(function (episode, i) {

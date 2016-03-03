@@ -117,14 +117,14 @@ var PodcastTileListing = React.createClass({
                     { className: 'podcast-description' },
                     this.props.podcastInfo.feed.description
                 ),
-                React.createElement(SubscriptionButton, { user: this.props.user, podcastId: this.props.podcastInfo.id })
+                React.createElement(SubscriptionButton, { user: this.props.user, podcastId: this.props.podcastInfo._id })
             ),
             React.createElement(
                 'h2',
                 { className: 'no-margin' },
                 this.props.podcastInfo.feed.title
             ),
-            React.createElement(PodcastEpisodeListings, { episodes: this.props.podcastInfo.feed.entries })
+            React.createElement(PodcastEpisodeListings, { podcastId: this.props.podcastInfo._id, episodes: this.props.podcastInfo.feed.entries })
         );
     }
 
@@ -137,10 +137,11 @@ var SubscriptionButton = React.createClass({
             url: '/ajax/getsubscriptionstatus',
             data: {
                 podcastId: this.props.podcastId,
-                userId: this.props.user.id
+                userId: this.props.user.userId
             },
             dataType: 'json',
             cache: false,
+            type: "POST",
             success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
@@ -163,33 +164,37 @@ var SubscriptionButton = React.createClass({
             url: '/ajax/togglesubscription',
             data: {
                 podcastId: this.props.podcastId,
-                userId: this.props.user.id
+                userId: this.props.user.userId
             },
             dataType: 'json',
             cache: false,
+            type: "POST",
             success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
                 this.setState({ isSubscribed: data });
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
+                console.error('/ajax/togglesubscription', status, err.toString());
             }.bind(this)
         });
     },
     render: function () {
+        var buttonText;
         if (this.state.isSubscribed) {
             //display a button to unsubscribe to podcast
+            buttonText = 'Unsubscribe';
         } else {
-                //display a button that subscribes to podcast  
-            }
+            //display a button that subscribes to podcast
+            buttonText = 'Subscribe';
+        }
         return React.createElement(
             'div',
             null,
             React.createElement(
                 'button',
                 { type: 'submit', onClick: this.handleSubscription, className: 'pure-button pure-button-primary center-button subscription-button' },
-                'Subscribe',
+                buttonText,
                 React.createElement('input', { type: 'hidden', value: this.props.podcastId })
             )
         );
@@ -222,7 +227,23 @@ var PodcastEpisodeListings = React.createClass({
             title: episodeName,
             mp3: urlToLoad
         }).jPlayer("play");
-    }.bind(this),
+        //loadCheckPoints();
+        var podcastId = this.props.podcastId;
+        document.getElementById('hiddenInputForPodcastId').value = podcastId;
+        //        $.ajax({
+        //            url:'/ajax/getcheckpoints/?podcastId=' + podcastId + '&episodeTitle=' + episodeName,
+        //            dataType: 'json',
+        //            cache: true,
+        //            type: 'GET',
+        //            success: function(data) {
+        //                //get array of checkpoint locations pass it to jPlayer  
+        //            }.bind(this),
+        //            error: function (xhr, status, err) {
+        //                console.error(xhr, status, err.toString());    
+        //            }.bind(this)
+        //           
+        //        });
+    },
     render: function () {
         var episodeNodes = this.props.episodes.map(function (episode, i) {
             if (i > 30) return;

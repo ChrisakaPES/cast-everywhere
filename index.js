@@ -22,15 +22,14 @@ app.get('/', routes.index);
 app.get('/addPodcast', routes.addPodcast);
 app.get('/login', routes.userLogin);
 app.get('/logout', routes.userLogout);
-app.get('/my-subscriptions', routes.mySubscriptions);
+app.get('/my-subscriptions', routes.accessChecker, routes.mySubscriptions);
 app.get('/register', routes.userRegister);
 app.get('/testaudioplayer', routes.testAudioPlayer);
 
-app.get('/ajax/getloggedinuser', routes.getLoggedInUser);
+app.get('/ajax/getloggedinuser', routes.ajaxGetLoggedInUser);
 app.get('/ajax/getcheckpoints', routes.ajaxGetCheckpoints);
 app.get('/ajax/getallpodcasts', routes.ajaxGetAllPodcasts);
-app.get('/ajax/getsubscribedpodcasts', routes.ajaxGetSubscribedPodcasts),
-app.get('/ajax/getsubscriptionstatus', urlencodedParser, routes.ajaxGetSubscriptionStatus);
+app.get('/ajax/getsubscribedpodcasts', routes.ajaxGetSubscribedPodcasts);
 
 
 app.post('/addPodcast', urlencodedParser, routes.addPodcastPost);
@@ -38,6 +37,8 @@ app.post('/login', urlencodedParser, routes.userLoginPost);
 app.post('/register', urlencodedParser, routes.userRegisterPost);
 
 app.post('/ajax/addbookmark', urlencodedParser, routes.ajaxAddBookmark);
+app.post('/ajax/getsubscriptionstatus', urlencodedParser, routes.ajaxGetSubscriptionStatus);
 app.post('/ajax/togglesubscription', urlencodedParser, routes.ajaxToggleSubscription);
+
 console.log('Meow');
 app.listen(3000);

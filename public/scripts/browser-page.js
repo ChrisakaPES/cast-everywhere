@@ -108,11 +108,11 @@ var PodcastTileListing = React.createClass({
                 <div className="image-overlay-container" onClick={this.expandPodcastEntryList} onMouseOver={this.displayDescription} onMouseOut={this.hideDescription}>
                     <img className="podcast-image"  src={this.props.podcastInfo.feed.image.url} />
                     <div className="podcast-description">{this.props.podcastInfo.feed.description}</div>
-                    <SubscriptionButton user={this.props.user} podcastId={this.props.podcastInfo.id} />
+                    <SubscriptionButton user={this.props.user} podcastId={this.props.podcastInfo._id} />
                     
                 </div>
                 <h2 className="no-margin">{this.props.podcastInfo.feed.title}</h2>
-                <PodcastEpisodeListings episodes={this.props.podcastInfo.feed.entries}/>
+                <PodcastEpisodeListings podcastId={this.props.podcastInfo._id} episodes={this.props.podcastInfo.feed.entries}/>
             </div>
         );
     }
@@ -124,11 +124,12 @@ var SubscriptionButton = React.createClass({
             url: '/ajax/getsubscriptionstatus',
             data: {
                 podcastId: this.props.podcastId,
-                userId: this.props.user.id
+                userId: this.props.user.userId
             },
             dataType: 'json',
             cache: false,
-            success: function (data) {
+            type: "POST",
+           success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
                 this.setState({isSubscribed: data});
@@ -150,29 +151,33 @@ var SubscriptionButton = React.createClass({
             url: '/ajax/togglesubscription',
             data: {
                 podcastId: this.props.podcastId,
-                userId: this.props.user.id
+                userId: this.props.user.userId
             },
             dataType: 'json',
             cache: false,
+            type: "POST",
             success: function (data) {
                 console.log("Data pulled from RSS feed");
                 console.log(data);
                 this.setState({isSubscribed: data});
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
+                console.error('/ajax/togglesubscription', status, err.toString());
             }.bind(this)
         });  
     },
     render: function() {
+        var buttonText;
         if(this.state.isSubscribed) {
             //display a button to unsubscribe to podcast
+            buttonText = 'Unsubscribe';
         } else {
-            //display a button that subscribes to podcast   
+            //display a button that subscribes to podcast
+            buttonText = 'Subscribe';
         }
         return (
             <div>
-                <button type="submit" onClick={this.handleSubscription} className="pure-button pure-button-primary center-button subscription-button">Subscribe
+                <button type="submit" onClick={this.handleSubscription} className="pure-button pure-button-primary center-button subscription-button">{buttonText}
                     <input type="hidden" value={this.props.podcastId}/>
                 </button> 
             </div>
@@ -204,8 +209,24 @@ var PodcastEpisodeListings = React.createClass({
             title: episodeName,
             mp3: urlToLoad
         }).jPlayer("play");
+        //loadCheckPoints();
+        var podcastId= this.props.podcastId;
+        document.getElementById('hiddenInputForPodcastId').value = podcastId;
+//        $.ajax({
+//            url:'/ajax/getcheckpoints/?podcastId=' + podcastId + '&episodeTitle=' + episodeName,
+//            dataType: 'json',
+//            cache: true,
+//            type: 'GET',
+//            success: function(data) {
+//                //get array of checkpoint locations pass it to jPlayer   
+//            }.bind(this),
+//            error: function (xhr, status, err) {
+//                console.error(xhr, status, err.toString());     
+//            }.bind(this)
+//            
+//        });
          
-    }.bind(this),
+    },
     render: function() {
         var episodeNodes = this.props.episodes.map(function (episode, i) {
             if(i > 30) return;   

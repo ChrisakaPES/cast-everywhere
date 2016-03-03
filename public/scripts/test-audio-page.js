@@ -4,6 +4,7 @@ var TestAudioPlayer = React.createClass({
             <section className="bottom-of-page">
                 
                 <div id="jquery_jplayer_1" className="jp-jplayer"></div>
+                <input id='hiddenInputForPodcastId' type="hidden" value='' />
                 <div id="jp_container_1" className="jp-audio" role="application" aria-label="media player">
                     <div className="jp-type-single">
                         <div className="jp-gui jp-interface">
@@ -37,7 +38,7 @@ var TestAudioPlayer = React.createClass({
                             </div>
                         </div>
                         <div className="jp-details">
-                            <div className="jp-title" aria-label="title">&nbsp;</div>
+                            <div id="podcastTitleDiv" className="jp-title" aria-label="title">&nbsp;</div>
                         </div>
                         <div className="jp-no-solution">
                             <span>Update Required</span>

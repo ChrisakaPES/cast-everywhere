@@ -11,7 +11,7 @@ var LoggedInMenuItems = React.createClass({
                 React.createElement(
                     "a",
                     { href: "/my-subscriptions", className: "pure-menu-link" },
-                    "My Profile"
+                    "My Subscriptions"
                 )
             ),
             React.createElement(
@@ -107,15 +107,6 @@ var SideNav = React.createClass({
                         "a",
                         { href: "/", className: "pure-menu-link" },
                         "Discover"
-                    )
-                ),
-                React.createElement(
-                    "li",
-                    { className: "pure-menu-item" },
-                    React.createElement(
-                        "a",
-                        { href: "step2", className: "pure-menu-link" },
-                        "Subscriptions"
                     )
                 ),
                 endPositionNav,

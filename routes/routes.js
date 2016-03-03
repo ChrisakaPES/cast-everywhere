@@ -1,6 +1,7 @@
     var mongoose = require('mongoose'),
-    rssParser = require('rss-parser'),
-    uriUtil = require('mongodb-uri');
+        queryString = require('querystring'),
+        rssParser = require('rss-parser'),
+        uriUtil = require('mongodb-uri');
 
 var mongodbUri = 'mongodb://ds051740.mongolab.com:51740/capstonedb';
 var mongooseUri = uriUtil.formatMongoose(mongodbUri);
@@ -23,16 +24,20 @@ var podcastSchema = mongoose.Schema({
 });
 var podcastSubscriptionSchema = mongoose.Schema({});
 var podcastTimestampSchema = mongoose.Schema({
-    podcastName: String,
-    timeStampInSecs: Number
+    allTimestamps: [{
+        podcastId: String,
+        episodeInfo: [{
+            timeStampInSecs: [Number],
+            title: String
+        }]
+    }],
+    userId: String
 });
 var userSchema = mongoose.Schema({
     name: String,
     email: String,
     password: String,
-    subscriptions: [{
-        podcastID: String   
-    }]
+    subscriptions: [String]
     
 });
 
@@ -79,80 +84,233 @@ exports.addPodcastPost = function (req, res) {
         
     });
 }
+
 exports.ajaxAddBookmark = function (req, res) {
     console.log(req.body);
     var checkpointInSec = req.body.currentTime;
-    var podcastName = req.body.podcast;
+    var podcastId = req.body.podcastId,
+        podcastTitle = req.body.podcastTitle;
     
-    var newPodcastTimeStamp = new PodcastTimestamp({
-        podcastName: podcastName,
-        timeStampInSecs: checkpointInSec
-    });
-    newPodcastTimeStamp.save(function (err, newPodcastCheckpoint) {
-        if(err)return console.error(err);
-        console.log("New Checkpoint added");
-        console.log(newPodcastCheckpoint);
+    if(!req.session.user) {
+        return;
+    }
+    var doesUserHaveNoCheckpoints = false, 
+        userId = req.session.user.userId;
+    console.log(userId);
+    
+    
+    //If user does have book marks grab the podcast array add add the bookmark 
+    PodcastTimestamp.findOne({userId: userId}, function(err, timestamp) {
+        if(err) return console.error(err);
+        if(timestamp) {
+            for(var i = 0; i < timestamp.allTimestamps.length ; i++) {
+                //console.log(timestamp.allTimestamps[i].podcastId);
+                //console.log(podcastId);
+                if(timestamp.allTimestamps[i].podcastId === podcastId) {
+                    console.log('Podcast found determining next step');
+                    for(var j = 0; j < timestamp.allTimestamps[i].episodeInfo.length; j++) {
+                        if(timestamp.allTimestamps[i].episodeInfo[j].title === podcastTitle) { // Episode Has bookmarks just adding to the existing list
+                            console.log('Episode Found is DB adding to document Meow');
+                            timestamp.allTimestamps[i].episodeInfo[j].timeStampInSecs.push(checkpointInSec);
+                            timestamp.save(function (err, updatedTimestamp) {
+                                if(err) return console.error(err); 
+                            });
+                            return;
+                        }  
+                    }
+                    //Podcast has episodes with checkpoints but not this one so adding EpisodeInfo with appropriate info
+                    timestamp.allTimestamps[i].episodeInfo.push({
+                        timeStampInSecs: [checkpointInSec],
+                        title: podcastTitle
+                    });
+                    console.log('Podcast Episode was not in db adding now');
+                    timestamp.save(function (err, updatedTimestamp) {
+                        if(err) return console.error(err); 
+                    });
+                    return;
+                }
+            }
+            //Podcast doesn't have any checkpoints at all the podcast needs to be added to the collection along with checkpoint info
+            timestamp.allTimestamps.push({
+                podcastId: podcastId,
+                episodeInfo: {
+                    timeStampInSecs: [checkpointInSec],
+                    title: podcastTitle
+                }
+            });
+            console.log('Podcast does not have any checkpoints so they are being added');
+            timestamp.save(function (err, updatedTimestamp) {
+                if(err) return console.error(err); 
+                return;
+            });
+        } else {
+            doesUserHaveNoCheckpoints = true;
+            console.log('doesUserHaveNoCheckpoints = true');
+            //User does not have previous checkpoints at all so entire document must be added
+            if(doesUserHaveNoCheckpoints) {
+                console.log('User doesnt have checkpoints Meow')
+                var newPodcastTimeStamp = new PodcastTimestamp({
+                    allTimestamps: {
+                        podcastId: podcastId,
+                        episodeInfo: {
+                            timeStampInSecs: [checkpointInSec],
+                            title: podcastTitle
+                        }
+                    },
+                    userId: userId
+                });
+                newPodcastTimeStamp.save(function (err, newPodcastCheckpoint) {
+                    if(err)return console.error(err);
+                    console.log("New Checkpoint added");
+                    console.log(newPodcastCheckpoint);
+                });
+            }   
+        }
     });
 }
+
 exports.ajaxGetAllPodcasts = function(req, res) {
     var podcastCollection = [];
     Podcast.find({}, function(err, podcasts) {
         collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, function(collection) {
             res.json(collection);
-        });
-        
-    });
-    
+        }); 
+    });   
 }
+
 exports.ajaxGetCheckpoints = function (req, res) {
 //    console.log("Get Checkpoint entrance Meow");
 //    console.log(req.query);
-    PodcastTimestamp.find({podcastName: 'Giant Bombcast'}, function(err, timestamps) {
+    if(!req.session.user) {
+        res.json([]);   
+    }
+    var queryData = queryString.parse(req._parsedUrl.query);
+    var checkpoints = [],
+        podcastId = queryData.podcastId,
+        podcastTitle = queryData.podcastTitle,
+        userId = req.session.user.userId;
+    PodcastTimestamp.findOne({userId: userId}, function(err, timestampDoc) {
        if(err) return console.error(err);
-        //console.log(timestamps);
-        res.json(timestamps);
+        if(timestampDoc) {
+            console.log(timestampDoc);
+            for(var i = 0; i < timestampDoc.allTimestamps.length; i++) {
+                if(timestampDoc.allTimestamps[i].podcastId === podcastId) {
+                    console.log('podcast found determining next move');
+                    for(var j = 0; j < timestampDoc.allTimestamps[i].episodeInfo.length; j++) {
+                        if(timestampDoc.allTimestamps[i].episodeInfo[j].title === podcastTitle) {
+                            console.log('Episodes Found');
+                            checkpoints = timestampDoc.allTimestamps[i].episodeInfo[j].timeStampInSecs;
+                        }
+                    }
+                }
+            }
+            res.json(checkpoints);
+        }
     });
 }
-exports.ajaxGetSubscribedPodcasts = function(req,res) {
-    //pull in subscribed Podcasts
+
+exports.ajaxGetLoggedInUser = function (req, res) {
+    if(req.session.user && req.session.user.isAuthenticated) {
+        res.json(req.session.user);    
+    } else {
+        res.json({
+            isAuthenticated: false,
+            username: 'NoLoggedInUser'
+        });
+    }
 }
+
+exports.ajaxGetSubscribedPodcasts = function(req, res) {
+    //pull in subscribed Podcasts
+    var userId = req.session.user.userId;
+    console.log(userId);
+    User.findById(userId, function (err, user) {
+        if(err) return console.error;
+        if(user) {
+            var subscribedPodcasts = [];
+            var numberOfSubscribedPodcasts = user.subscriptions.length;
+            var numberOfPodcastsAdded = 0;
+            console.log('UserFound Meow');
+            for(var i = 0; i< user.subscriptions.length; i++) {
+                Podcast.findById(user.subscriptions[i], function(err, podcast) {
+                    if(err) return console.error;
+                    if(podcast) {
+                        console.log('podcastFound');
+                        var podcastEntry = {
+                            _id: podcast._id,
+                            description: podcast.description,
+                            rssUrl: podcast.rssUrl,
+                            title: podcast.title
+                        }
+                        console.log(podcastEntry);
+                        subscribedPodcasts.push(podcastEntry);
+                        numberOfPodcastsAdded++;
+                        if(numberOfPodcastsAdded === numberOfSubscribedPodcasts) {
+                            collectParsedPodcastRSSInfoToSendViaAJAX(subscribedPodcasts, function(collection) {
+                res.json(collection);   
+            });   
+                        }
+                    }
+                });   
+            }
+            console.log(subscribedPodcasts);
+            
+        }
+    });
+}
+
 exports.ajaxGetSubscriptionStatus = function (req, res) {
     var podcastId = req.body.podcastId,
          userId = req.body.userId;
-    User.findOne({_id: userId}, function(err, user) {
+    
+    User.findById(userId, function(err, user) {
         if(err) return console.error(err);
         if(user) {
             var subscriptions = user.subscriptions;
+            var isUserSubscribed = false;
             for(var i = 0; i < subscriptions.length; i++) {
-                if(subscriptions.podcastId === podcastId) {
-                    res.json({isSubscribed: true})   
+                if(subscriptions[i] === podcastId) {
+                    isUserSubscribed = true;
                 }
             }
-            res.json({isSubscribed: false});
+            res.json(isUserSubscribed);
+        } else {
+            console.log('UserNotLoggedin');
+            res.json(false);        
         }
     });
 }
+
 exports.ajaxToggleSubscription = function (req, res) {
     var podcastId = req.body.podcastId,
         userId = req.body.userId;
-    var userBeingUpdated = User.findOne({_id: userId}, function(err, user) {
+    var userBeingUpdated = User.findById(userId, function(err, user) {
         if(err) return console.error(err);
         if(user) {
             var subscriptions = user.subscriptions;
+            var willBeSubscribedUponCompletion = true;
+            console.log(podcastId);
             for(var i = 0; i < subscriptions.length; i++) {
-                if(subscriptions.podcastId === podcastId) {
-                    user.subscriptions.splice(i, 1);//removing from subscription list
-                    res.json({isSubscribed: false})   
+                console.log(subscriptions[i]);
+                if(subscriptions[i] === podcastId) {
+                    console.log('Unsubscribed from podcast Meow');
+                    user.subscriptions.splice(i, 1);
+                    willBeSubscribedUponCompletion = false;
                 }
             }
-            user.subscriptions.push({podcastId: podcastId});//adding the podcast to the Subscription
-            res.json({isSubscribed: true});
+            if(willBeSubscribedUponCompletion) {
+                console.log('subscribed to podcast meow');
+                user.subscriptions.push(podcastId);//adding the podcast to the Subscription
+            }
+            user.save();
+            res.json(willBeSubscribedUponCompletion);
         }
-    }).save(function(err, userToSave) {
-        if(err) return console.error(err);   
     });
+    
+    
                                         
 }
+
 exports.index = function (req,res) {
     var options = {
         root: view_directory,
@@ -164,16 +322,7 @@ exports.index = function (req,res) {
     }
     res.sendFile('/index.html', options);   
 }
-exports.getLoggedInUser = function (req, res) {
-    if(req.session.user && req.session.user.isAuthenticated) {
-        res.json(req.session.user);    
-    } else {
-        res.json({
-            isAuthenticated: false,
-            username: 'NoLoggedInUser'
-        });
-    }
-}
+
 exports.mySubscriptions = function (req, res) {
     var options = {
         root: view_directory,
@@ -197,6 +346,7 @@ exports.testAudioPlayer = function(req,res) {
     }
     res.sendFile('/test-audio-player.html', options);
 }
+
 exports.userLogin = function (req, res) {
     var options = {
         root: view_directory,
@@ -208,6 +358,7 @@ exports.userLogin = function (req, res) {
     }
     res.sendFile('/user-login.html', options);
 }
+
 exports.userLoginPost = function(req, res) {
     var usernameSubmission = req.body.username,
         passwordSubmission = req.body.password;
@@ -233,10 +384,12 @@ exports.userLoginPost = function(req, res) {
         }
     });
 }
+
 exports.userLogout = function(req, res) {
-    req.session.user = {};
+    req.session.user = null;
     res.redirect(301, '/');
 }
+
 exports.userRegister = function (req,res) {
     var options = {
         root: view_directory,
@@ -248,6 +401,7 @@ exports.userRegister = function (req,res) {
     }
     res.sendFile('/user-register.html', options);
 }
+
 exports.userRegisterPost = function (req,res) {
     var userName = req.body.username,
         userPassword = req.body.password,
@@ -266,21 +420,17 @@ exports.userRegisterPost = function (req,res) {
 }
 
 function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
-    //console.log("Entrance of [Longest Function Name] meow");
     var podcastCollection = [];
     var numPodcastFeedsToPull = podcasts.length;
     var rssFeedPulled = 0;
     var podcastEntry = {};
     //console.log(podcasts);
     for(var i = 0; i < podcasts.length; i++) {
-        podcastEntry.id = podcasts[i]._id;
-        //console.info(podcasts[i]);
-        rssParser.parseURL(podcasts[i].rssUrl, function(err, parsed) {
+        rssParser.parseURL(podcasts[i], function(err, parsed) {
             if(err)return console.error('RSSParser Error: ' + err);
-            //console.log(parsed.feed);
-            
+            //console.log(parsed);
             podcastEntry.feed = parsed.feed;
-            podcastCollection.push(podcastEntry);
+            podcastCollection.push(parsed);
             rssFeedPulled++;
             if(rssFeedPulled === numPodcastFeedsToPull) {
                 callback(podcastCollection);   
@@ -381,6 +531,7 @@ function collectParsedPodcastRSSInfoToSendViaAJAX(podcasts, callback){
     
     
 }
+
 function getPodcastDBInfo(podcasts) {
     var podcastInfoArray = [];
     for(var podcastIndex in podcasts) {

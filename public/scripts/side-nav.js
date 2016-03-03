@@ -2,7 +2,7 @@ var LoggedInMenuItems = React.createClass({
     render: function() {
         return (
             <div>
-                <li className="pure-menu-item"><a href="/my-subscriptions" className="pure-menu-link">My Profile</a></li>
+                <li className="pure-menu-item"><a href="/my-subscriptions" className="pure-menu-link">My Subscriptions</a></li>
                 <li className="pure-menu-item"><a href="/logout" className="pure-menu-link">Logout</a></li>
             </div>
         );
@@ -57,7 +57,6 @@ var SideNav = React.createClass({
 
                 <ul className="pure-menu-list">
                     <li className="pure-menu-item"><a href="/" className="pure-menu-link">Discover</a></li>
-                    <li className="pure-menu-item"><a href="step2" className="pure-menu-link">Subscriptions</a></li>
                     {endPositionNav}
                     <li className="pure-menu-item"><a href="step5" className="pure-menu-link">Options</a></li>
                 </ul>

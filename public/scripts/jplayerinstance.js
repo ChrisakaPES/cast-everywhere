@@ -18,7 +18,7 @@
 //        toggleDuration: true
 //    }); 
 //});
-var jplayerDiv;
+var jplayerDiv, loadCheckPoints;
 $(document).ready(function() {
     var checkpointCanvas = $('#checkpointCanvas');
     var checkpointCanvasContext = checkpointCanvas[0].getContext('2d');
@@ -43,16 +43,26 @@ $(document).ready(function() {
         checkpointCanvasContext.closePath();
         checkpointCanvasContext.fill();        
     }
-    
-    function loadCheckpoints(duration) {
+    function clearCanvas() {
+        checkpointCanvasContext.save();
+        
+        checkpointCanvasContext.setTransform(1,0,0,1,0,0);
+        checkpointCanvasContext.clearRect(0, 0, checkpointCanvas.width, checkpointCanvas.height);
+        
+        checkpointCanvasContext.restore();
+
+    }
+    loadCheckPoints = function (duration) {
+        var podcastId = document.getElementById('hiddenInputForPodcastId').value,
+            podcastTitle = document.getElementById('podcastTitleDiv').innerHTML;
         $.getJSON('/ajax/getcheckpoints',{
-            title: "Giant Bombcast",
-            mp3: "http://www.giantbomb.com/podcasts/download/1473/Giant_Bombcast_01_12_2016-01-12-2016-0020062817.mp3"
+            podcastId: podcastId,
+            podcastTitle: podcastTitle
         }).done(function(json){
-            console.log();  
-            for(var checkpoint in json){
-                 console.log(json[checkpoint].timeStampInSecs);
-                var checkpointLocationPoint = $(".jp-progress").width() * (Math.floor(json[checkpoint].timeStampInSecs) / duration);
+            console.log(json);  
+            for(var i = 0; i < json.length; i++) {
+                 console.log(json[i]);
+                var checkpointLocationPoint = $(".jp-progress").width() * (Math.floor(json[i]) / duration);
                 drawCheckpoint(checkpointLocationPoint);
             }
         }).fail(function( jqxhr, textStatus, error ) {
@@ -64,16 +74,27 @@ $(document).ready(function() {
     jplayerDiv = $("#jquery_jplayer_1");
     var jplayer = jplayerDiv.jPlayer({
         ready: function(event) {
-            $(this).jPlayer("setMedia", {
-                title: "Giant Bombcast",
-                mp3: "http://www.giantbomb.com/podcasts/download/1473/Giant_Bombcast_01_12_2016-01-12-2016-0020062817.mp3" 
-            });
-            $(this).jPlayer("load");
-            console.log(event.jPlayer.status);
-            loadCheckpoints(event.jPlayer.status.duration);
+//            $(this).jPlayer("setMedia", {
+//                title: "Giant Bombcast",
+//                mp3: "http://www.giantbomb.com/podcasts/download/1473/Giant_Bombcast_01_12_2016-01-12-2016-0020062817.mp3" 
+//            });
+//            $(this).jPlayer("load");
+//            console.log(event.jPlayer.status);
+//            loadCheckpoints(event.jPlayer.status.duration);
         },
         click: function(event) {
             console.log(event.jPlayer);
+        },
+        loadeddata: function(event) {
+            clearCanvas();
+            console.log(event.jPlayer.status.duration);
+            loadCheckPoints(event.jPlayer.status.duration);
+        },
+        loadedmetadata: function(event) {
+            
+        },
+        play: function(event) {
+            
         },
         cssSelectorAncestor: "#jp_container_1",
         swfPath: "/swf",
@@ -96,10 +117,14 @@ $(document).ready(function() {
     $("#bookmarkButton").click(function(){
         console.log("Meow bookmarkButton Pressed");
         console.log(jPlayerData.status);
-        var timestamp = Math.floor(jPlayerData.status.currentTime);
+        var podcastId = document.getElementById('hiddenInputForPodcastId').value,
+            podcastTitle = document.getElementById('podcastTitleDiv').innerHTML,
+            timestamp = Math.floor(jPlayerData.status.currentTime);
+        
         $.post('/ajax/addbookmark', {
             currentTime: timestamp,
-            podcast: 'Giant Bombcast'
+            podcastId: podcastId,
+            podcastTitle: podcastTitle
         });
         var checkpointLocationPoint = $(".jp-progress").width() * (Math.floor(jPlayerData.status.currentTime) / jPlayerData.status.duration);
         //$(".jp-progress").width() * (jPlayerData.status.currentPercentRelative /100); //3 + $(".jp-play-bar").width();
